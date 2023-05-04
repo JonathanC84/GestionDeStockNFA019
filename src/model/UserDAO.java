@@ -2,19 +2,27 @@ package model;
 
 import java.sql.*;
 
-/**
- * DATA ACCESS OBJECT
- * User
- * @author Jonathan Cayrol
- *
- */
-
 public class UserDAO {
 
-	private Connection conn;
+	private Connection connection;
 	
 	public UserDAO() {
-		conn = Connexion.getConnection();
+		connection = Connexion.getConnection();
 	}
 	
+	private boolean authUser() {
+		
+	}
+	
+	public void addUser() {
+		
+	}
+	
+	public void editUser() {
+		
+	}
+	
+	public void deleteUser() {
+		
+	}
 }
