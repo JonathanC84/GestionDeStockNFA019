@@ -2,14 +2,14 @@ package model;
 
 import java.sql.*;
 
-public class Connexion {
+public class Connector {
 
 	private static String url = "jdbc:mysql://localhost:3306/bdStock?useSSL=false&serverTimezone=UTC";
 	private static String user = "root";
 	private static String password = "";
 	private static Connection connection = null;
 	
-	public Connexion() {
+	public Connector() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 			
@@ -21,7 +21,7 @@ public class Connexion {
 	
 	public static Connection getConnection() {
 		if (connection == null) {
-			new Connexion();
+			new Connector();
 		}
 		return connection;
 	}

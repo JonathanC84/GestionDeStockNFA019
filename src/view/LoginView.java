@@ -44,7 +44,7 @@ public class LoginView {
 		welcomeLabel = new JLabel(logo);
 		welcomeLabel.setBounds(0, 40, 1000, 320);
 		welcomeLabel.setLayout(null);
-		welcomeLabel.setText("GeStock.");
+		welcomeLabel.setText("GeStock");
 		welcomeLabel.setVerticalTextPosition(JLabel.CENTER);
 		welcomeLabel.setHorizontalTextPosition(JLabel.RIGHT);
 		welcomeLabel.setForeground(blueColor);
