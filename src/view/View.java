@@ -4,11 +4,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-
 import javax.swing.*;
 import javax.swing.border.Border;
-
-import model.ProductTableModel;
 
 public class View {
 
@@ -22,6 +19,8 @@ public class View {
 	private JPanel supplyPanel;
 	private JScrollPane productScroll;
 	private JTable productTable;
+	private ImageIcon icon;
+	private ImageIcon logout;
 	
 	public View() {
 		initialize();
@@ -29,8 +28,8 @@ public class View {
 
 	private void initialize() {
 		
-		ImageIcon icon = new ImageIcon("img/logo32.png");
-		ImageIcon logout = new ImageIcon("img/logout.png");
+		icon = new ImageIcon(getClass().getClassLoader().getResource("logo32.png"));
+		logout = new ImageIcon(getClass().getClassLoader().getResource("logout.png"));
 		
 		Color backgroundColor = new Color(0xbfe1fc);
 		Color blueColor = new Color(0x0088ff);
@@ -77,7 +76,6 @@ public class View {
 		//onglet produits
 		productPanel = new JPanel();
 		mainTabs.addTab("Produits en stock", null, productPanel, null);
-		//productPanel.setLayout(null);
 		
 		productTable = new JTable();
 		productTable.setPreferredScrollableViewportSize(new Dimension(1330, 400));

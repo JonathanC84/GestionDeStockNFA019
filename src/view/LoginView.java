@@ -13,6 +13,8 @@ public class LoginView {
 	private JTextField userNameField;
 	private JPasswordField passwordField;
 	private JButton loginButton;
+	private ImageIcon icon;
+	private ImageIcon logo;
 
 	public LoginView() {
 		initialize();
@@ -20,8 +22,8 @@ public class LoginView {
 
 	private void initialize() {
 		
-		ImageIcon icon = new ImageIcon("img/logo32.png");
-		ImageIcon logo = new ImageIcon("img/logo180.png");
+		icon = new ImageIcon(getClass().getClassLoader().getResource("logo32.png"));
+		logo = new ImageIcon(getClass().getClassLoader().getResource("logo180.png"));
 		
 		Color backgroundColor = new Color(0xbfe1fc);
 		Color blueColor = new Color(0x0088ff);
@@ -93,13 +95,6 @@ public class LoginView {
 		
 	}
 		
-	
-	/*
-	 * getters
-	 * 		
-	 */
-		
-
 	public JTextField getUserNameField() {
 		return userNameField;
 	}

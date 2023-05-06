@@ -12,6 +12,7 @@ public class Launch {
 		View view = new View();
 		MainController controller1 = new MainController(loginView, view);
 		
+		// au lancement de l'application on appelle la fenêtre login
 		try {
 			loginView.frame.setVisible(true);
 		} catch (Exception e) {

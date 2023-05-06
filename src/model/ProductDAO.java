@@ -11,6 +11,7 @@ public class ProductDAO {
 		connection = Connector.getConnection();
 	}
 
+	// récupération des données sous forme d'ArrayList
 	public ArrayList<ProductModel> getAllProducts() {
 		ArrayList<ProductModel> allProducts = new ArrayList<ProductModel>();
 		
@@ -42,5 +43,17 @@ public class ProductDAO {
 	
 	public ProductTableModel productTableModel() {
 		return new ProductTableModel(getAllProducts());
+	}
+	
+	public void deleteProduct(int id) {
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement("delete from produit where id_produit="+id);
+			
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

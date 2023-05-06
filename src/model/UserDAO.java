@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.*;
+import java.util.HashMap;
 
 public class UserDAO {
 
@@ -25,22 +26,22 @@ public class UserDAO {
 		return checked;
 	}
 	
-	private String userName(String login) {
-		String prenom = "";
-		String nom = "";
+	private HashMap<String, String> userDetails(String login) {
+		HashMap<String, String> userDetails = new HashMap<>();
 		String query = "select * from Utilisateur where login_user = '"+login+"';";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet resultSet = statement.executeQuery(query);
 			if(resultSet.next()) {
-				prenom = resultSet.getString("prenom_user");
-				nom = resultSet.getString("nom_user");
+				userDetails.put("prenom", resultSet.getString("prenom_user"));
+				userDetails.put("nom", resultSet.getString("nom_user"));
+				userDetails.put("role", resultSet.getString("role_user"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		return (prenom+" "+nom);
+		return userDetails;
 	}
 	
 	public void addUser() {
@@ -59,8 +60,8 @@ public class UserDAO {
 		return authUser(login, password);
 	}
 	
-	public String getUserName(String login) {
-		return userName(login);
+	public HashMap<String, String> getUserDetails(String login) {
+		return userDetails(login);
 	}
 	
 }

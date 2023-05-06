@@ -1,7 +1,8 @@
 package controller;
 
+import java.awt.event.KeyEvent;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 import view.LoginView;
@@ -14,21 +15,32 @@ public class MainController {
 	private View view;
 	private UserDAO userDAO;
 	private ProductDAO productDAO;
+	private ProductController productController;
+	// taille des colonnes de la table Produits
+	static int COLUMN_SIZES[] = {50, 200, 300, 100, 100, 200, 200, 75, 75};
+	
+	public MainController() {
+		
+	}
 	
 	public MainController(LoginView loginView, View view) {
 		this.loginView = loginView;
 		this.view = view;
 		userDAO = new UserDAO();
 		productDAO = new ProductDAO();
+		productController = new ProductController();
 		initController();
 	}
 	
+	// initalisation des méthodes pour la fenêtre login
 	public void initController() {
 		loginView.getUserNameField().addActionListener(e -> authentification());
 		loginView.getPasswordField().addActionListener(e -> authentification());
 		loginView.getLoginButton().addActionListener(e -> authentification());
 	}
 	
+	
+	// méthode pour authentifier l'utilisateur, appelle la méthode initView
 	private void authentification() {
 		String user = loginView.getUserNameField().getText();
 		char[] pass = loginView.getPasswordField().getPassword();
@@ -45,34 +57,44 @@ public class MainController {
 				for (char c : pass) {
 					c = 0;
 				}
-				initView(userDAO.getUserName(user));
+				initView(userDAO.getUserDetails(user));
 			} else {
 				JOptionPane.showMessageDialog(loginView.frame, "Nom d'utilisateur ou mot de passe incorrects");
 			}
 		}
 	}
 	
-	public void initView(String userName) {
+	/* si l'authentification est réussie, méthode qui cache la fenêtre login
+	   et ouvre la fenêtre principale avec affichage des données */
+	public void initView(HashMap<String,String> userDetails) {
 		view.frame.setVisible(true);
 		loginView.frame.dispose();
-		view.getWelcomeLabel().setText("Bienvenue sur GeStock, "+userName+" !");
+		// récupère et affiche le prénom et le rôle de l'utilisateur
+		view.getWelcomeLabel().setText("Bienvenue "+userDetails.get("prenom")+" ("+userDetails.get("role")+")");
+		// le bouton logout appelle la méthode de déconnexion de l'utilisateur
 		view.getLogoutBtn().addActionListener(e -> disconnection());
-		view.getProductTable().setModel(productDAO.productTableModel());
-		changeColumnWidth(0, 50);
-		changeColumnWidth(1, 200);
-		changeColumnWidth(2, 300);
-		changeColumnWidth(3, 100);
-		changeColumnWidth(4, 100);
-		changeColumnWidth(5, 200);
-		changeColumnWidth(6, 150);
-		changeColumnWidth(7, 100);
-		changeColumnWidth(8, 100);
+		
+		// affichage de la table Produits en utilisant la classe ProductTableModel et deux colonnes Boutons
+		// pour éditer et supprimer une ligne (classe ButtonColumn)
+		JTable productTable = view.getProductTable();
+		productTable.setModel(productDAO.productTableModel());
+		ButtonColumn editButton = new ButtonColumn(productTable, productController.editProduct(), 7);
+		editButton.setMnemonic(KeyEvent.VK_E);
+		ButtonColumn deleteButton = new ButtonColumn(productTable, productController.deleteProduct(), 8);
+		deleteButton.setMnemonic(KeyEvent.VK_DELETE);
+		
+		// on personnalise la taille des colonnes
+		changeColumnWidth(productTable, COLUMN_SIZES);
 	}
 	
-	public void changeColumnWidth(int index, int size) {
-		view.getProductTable().getColumnModel().getColumn(index).setPreferredWidth(size);
+	// méthode qui permet de régler la taille des colonnes individuellement avec le tableau fourni
+	public void changeColumnWidth(JTable table, int[] COLUMN_SIZES) {
+		for (int i = 0; i < COLUMN_SIZES.length; i++) {
+			table.getColumnModel().getColumn(i).setPreferredWidth(COLUMN_SIZES[i]);
+		}
 	}
 	
+	// méthode qui déconnecte l'utilisateur actuel et qui retourne à la page login (appelée par le bouton logout)
 	public void disconnection() {
 		view.frame.dispose();
 		loginView.getUserNameField().setText("");
