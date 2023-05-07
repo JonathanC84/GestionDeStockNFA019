@@ -11,8 +11,8 @@ public class ProductDAO {
 		connection = Connector.getConnection();
 	}
 
-	public ProductTableModel productTableModel() {
-		return new ProductTableModel(getAllProducts());
+	public ProductTableModel productTableModel(String userRole) {
+		return new ProductTableModel(getAllProducts(), userRole);
 	}
 
 	// récupération des données sous forme d'ArrayList
@@ -64,6 +64,28 @@ public class ProductDAO {
 			e.printStackTrace();
 		}
 		return product;
+	}
+	
+	public void addProduct(ProductModel product) {
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement("insert into produit ("
+					+ "ref_produit, nom_produit, desc_produit, qte_produit, duree_conservation, prix_unit, id_cat, id_fourn) "
+					+ "values (?,?,?,?,?,?,?,?);");
+			
+			preparedStatement.setString(1, product.getProdRef());
+			preparedStatement.setString(2, product.getProdName());
+			preparedStatement.setString(3, product.getProdDesc());
+			preparedStatement.setInt(4, product.getProdQuantity());
+			preparedStatement.setInt(5, product.getProdExpTime());
+			preparedStatement.setDouble(6, product.getProdUnitPrice());
+			preparedStatement.setInt(7, product.getProdCategory());
+			preparedStatement.setInt(8, product.getProdSupplier());			
+			
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void editProduct(int id, ProductModel product) {

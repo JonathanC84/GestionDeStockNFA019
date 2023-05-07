@@ -2,31 +2,36 @@ package controller;
 
 import model.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import view.ProductOptionView;
+import view.View;
 
 public class ProductController {
 
 	private ProductDAO productDAO = new ProductDAO();
 	// taille des colonnes de la table Produits
-	static int COLUMN_SIZES[] = {50, 200, 200, 50, 75, 200, 200, 200, 75, 75};
+	static int COLUMN_SIZES[] = {50, 150, 200, 50, 75, 200, 150, 150, 75, 75};
+	// version commercial
+	static int COLUMN_SIZES_MIN[] = {50, 150, 200, 50, 75, 200, 150, 150};
 
 	// méthode qui initialise la table (ou l'actualise après changement)
-	public void initializeProductTable(JTable productTable) {
+	public void initializeProductTable(JTable productTable, String userRole) {
 		// affichage de la table Produits en utilisant la classe ProductTableModel et deux colonnes Boutons
-		// pour éditer et supprimer une ligne (classe ButtonColumn)
-		productTable.setModel(productDAO.productTableModel());
+		// pour éditer et supprimer une ligne (classe ButtonColumn) en fonction des droits utilisateurs
+		productTable.setModel(productDAO.productTableModel(userRole));
 		productTable.setAutoCreateRowSorter(true);
-		ButtonColumn editButton = new ButtonColumn(productTable, editProduct(), 8);
-		editButton.setMnemonic(KeyEvent.VK_E);
-		ButtonColumn deleteButton = new ButtonColumn(productTable, deleteProduct(), 9);
-		deleteButton.setMnemonic(KeyEvent.VK_DELETE);
-		// on personnalise la taille des colonnes
-		changeColumnWidth(productTable, COLUMN_SIZES);
+
+		if(!userRole.equals("commercial")) {
+			@SuppressWarnings("unused")
+			ButtonColumn editButton = new ButtonColumn(productTable, editProduct(userRole), 8);
+			@SuppressWarnings("unused")
+			ButtonColumn deleteButton = new ButtonColumn(productTable, deleteProduct(userRole), 9);
+			changeColumnWidth(productTable, COLUMN_SIZES);
+		} else changeColumnWidth(productTable, COLUMN_SIZES_MIN);
+		
 	}
 
 	// méthode qui permet de régler la taille des colonnes individuellement avec le tableau fourni
@@ -36,12 +41,39 @@ public class ProductController {
 		}
 	}
 
-	public void addProduct() {
+	public void addProduct(View view, String userRole) {
+		JTable tableProduct = view.getProductTable();
+		ProductModel newProduct = new ProductModel();
+		ImageIcon editIcon = new ImageIcon(getClass().getClassLoader().getResource("modify32.png"));
+		ProductOptionView pov = new ProductOptionView();
+		
+		// appel d'une boîte de dialogue implémentant le panel de la vue ProductOptionView
+		int option = JOptionPane.showConfirmDialog(null, pov.getPanel(newProduct) , "Ajout d'une ligne "
+				+ "produit", JOptionPane.OK_CANCEL_OPTION, 1, editIcon);
+		
+		if(option == JOptionPane.OK_OPTION) {
+			try {
+				// récupération des valeurs entrées dans les champs de la boîte de dialogue
+				newProduct.setProdRef(pov.getRefField());
+				newProduct.setProdName(pov.getNameField());
+				newProduct.setProdQuantity(pov.getQuantityField());
+				newProduct.setProdUnitPrice(pov.getUnitPriceField());
+				newProduct.setProdDesc(pov.getDescField());
+				newProduct.setProdExpTime(pov.getExpTimeField());
+				newProduct.setProdCategory(pov.getCategoryField());
+				newProduct.setProdSupplier(pov.getSupplierField());
+				productDAO.addProduct(newProduct);
+				// réinitialisation de la table pour affichage
+				initializeProductTable(tableProduct, userRole);
+			} catch (Exception exception) {
+				return;
+			}
+		}
 
 	}
 
 	@SuppressWarnings("serial")
-	public AbstractAction editProduct() {
+	public AbstractAction editProduct(String userRole) {
 		AbstractAction edit = new AbstractAction() {
 
 			@Override
@@ -52,7 +84,7 @@ public class ProductController {
 				int productId = (int) table.getModel().getValueAt(modelRow, 0);
 
 				ProductModel product = productDAO.getProduct(productId);
-				
+
 				ImageIcon editIcon = new ImageIcon(getClass().getClassLoader().getResource("modify32.png"));
 				ProductOptionView pov = new ProductOptionView();
 
@@ -73,7 +105,7 @@ public class ProductController {
 						product.setProdSupplier(pov.getSupplierField());
 						productDAO.editProduct(productId, product);
 						// réinitialisation de la table pour affichage
-						initializeProductTable(table);
+						initializeProductTable(table, userRole);
 					} catch (Exception exception) {
 						return;
 					}
@@ -84,7 +116,7 @@ public class ProductController {
 	}
 
 	@SuppressWarnings("serial")
-	public AbstractAction deleteProduct() {
+	public AbstractAction deleteProduct(String userRole) {
 		AbstractAction delete = new AbstractAction() {
 
 			@Override
@@ -102,7 +134,7 @@ public class ProductController {
 					try {
 						productDAO.deleteProduct(productId);
 						// réinitialisation de la table pour affichage
-						initializeProductTable(table);
+						initializeProductTable(table, userRole);
 					} catch (Exception exception) {
 						return;
 					}

@@ -17,7 +17,6 @@ public class MainController {
 	private ProductDAO productDAO;
 	private ProductController productController;
 	
-	
 	public MainController() {
 		
 	}
@@ -66,39 +65,46 @@ public class MainController {
 	/* si l'authentification est réussie, méthode qui cache la fenêtre login
 	   et ouvre la fenêtre principale avec affichage des données */
 	public void initView(HashMap<String,String> userDetails) {
+		String userName = userDetails.get("prenom");
+		String userRole = userDetails.get("role");
 		loginView.frame.dispose();
 		view.getMainTabs().setSelectedComponent(view.getProductPanel());
 		view.frame.setVisible(true);
 
+		// récupère et affiche le prénom et le rôle de l'utilisateur
+		view.getWelcomeLabel().setText("Bienvenue "+userName+" ("+userRole+")");
+		// le bouton logout appelle la méthode de déconnexion de l'utilisateur
+		view.getLogoutBtn().addActionListener(e -> disconnection());
+		view.getAddProductBtn().addActionListener(e -> productController.addProduct(view, userRole));
+		
+		// gère l'affichage en fonction des droits utilisateur
 		if(userDetails.get("role").equals("gestionnaire")) {
 			view.getUsersPanel().setVisible(false);
 			view.getMainTabs().remove(view.getUsersPanel());
 		} else if(userDetails.get("role").equals("commercial")) {
 			view.getUsersPanel().setVisible(false);
 			view.getSupplyPanel().setVisible(false);
+			view.getAddProductBtn().setVisible(false);
 			view.getMainTabs().remove(view.getUsersPanel());
 			view.getMainTabs().remove(view.getSupplyPanel());
+			view.getProductPanel().remove(view.getAddProductBtn());
 		}
-		// récupère et affiche le prénom et le rôle de l'utilisateur
-		view.getWelcomeLabel().setText("Bienvenue "+userDetails.get("prenom")+" ("+userDetails.get("role")+")");
-		// le bouton logout appelle la méthode de déconnexion de l'utilisateur
-		view.getLogoutBtn().addActionListener(e -> disconnection());
 		
 		
 		JTable productTable = new JTable();
 		productTable = view.getProductTable();
 				
-		productController.initializeProductTable(productTable);
+		productController.initializeProductTable(productTable, userDetails.get("role"));
 		
 	}	
-	
 	
 	// méthode qui déconnecte l'utilisateur actuel et qui retourne à la page login (appelée par le bouton logout)
 	public void disconnection() {
 		view.frame.dispose();
-		loginView.getUserNameField().setText("");
-		loginView.getPasswordField().setText("");
+		loginView = new LoginView();
+		view = new View();
 		loginView.frame.setVisible(true);
+		initController();
 	}
 	
 }

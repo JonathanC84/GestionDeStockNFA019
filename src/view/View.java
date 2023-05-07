@@ -5,22 +5,20 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.*;
+import javax.swing.border.Border;
 
 public class View {
 
 	public JFrame frame;
 	private JPanel header;
 	private JLabel welcomeLabel;
-	private JButton logoutBtn;
+	private JButton logoutBtn, addProductBtn;
 	private JTabbedPane mainTabs;
-	private JPanel productPanel;
-	private JPanel usersPanel;
-	private JPanel supplyPanel;
-	private JScrollPane productScroll;
-	private JTable productTable;
-	private ImageIcon icon;
-	private ImageIcon logout;
-	
+	private JPanel productPanel, usersPanel, supplyPanel, movementPanel, entriePanel, removalPanel;
+	private JScrollPane productScroll, entrieScroll, removalScroll;
+	private JTable productTable, entrieTable, removalTable;
+	private ImageIcon icon, logout;
+		
 	public View() {
 		initialize();
 	}
@@ -72,16 +70,47 @@ public class View {
 				
 		//onglet produits
 		productPanel = new JPanel();
+		productPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 15, 5));
 		mainTabs.addTab("Produits en stock", null, productPanel, null);
 		
 		productTable = new JTable();
-		productTable.setPreferredScrollableViewportSize(new Dimension(1330, 400));
-		productTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		productTable.setPreferredScrollableViewportSize(new Dimension(1300, 400));
+		//productTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		productTable.setRowHeight(30);
 		productTable.setFont(new Font("Arial", Font.PLAIN, 16));
-		
+
 		productScroll = new JScrollPane(productTable);
 		productPanel.add(productScroll);
+
+		// bouton ajouter produit
+		addProductBtn = new JButton("Ajouter produit");
+		addProductBtn.setToolTipText("Créer une ligne produit");
+		addProductBtn.setPreferredSize(new Dimension(200,40));
+		addProductBtn.setFont(new Font("Arial", Font.PLAIN, 18));
+		productPanel.add(addProductBtn);
+		
+		// panel mouvements
+		movementPanel = new JPanel();
+		movementPanel.setSize(new Dimension(1300, 200));
+		productPanel.add(movementPanel);
+		
+		// panel entrees
+		entriePanel = new JPanel();
+		entriePanel.setBorder(BorderFactory.createTitledBorder("Entrées"));
+		entrieTable = new JTable(); 
+		entrieTable.setPreferredScrollableViewportSize(new Dimension(632,240));
+		entrieScroll = new JScrollPane(entrieTable);
+		entriePanel.add(entrieScroll);
+		movementPanel.add(entriePanel);
+		
+		// panel sorties
+		removalPanel = new JPanel();
+		removalPanel.setBorder(BorderFactory.createTitledBorder("Sorties"));
+		removalTable = new JTable();
+		removalTable.setPreferredScrollableViewportSize(new Dimension(632,240));
+		removalScroll = new JScrollPane(removalTable);
+		removalPanel.add(removalScroll);
+		movementPanel.add(removalPanel);
 		
 		//onglet commandes
 		supplyPanel = new JPanel();
@@ -119,6 +148,10 @@ public class View {
 	
 	public JTabbedPane getMainTabs() {
 		return mainTabs;
+	}
+	
+	public JButton getAddProductBtn() {
+		return addProductBtn;
 	}
 	
 }
