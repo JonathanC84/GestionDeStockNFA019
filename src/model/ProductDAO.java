@@ -11,16 +11,18 @@ public class ProductDAO {
 		connection = Connector.getConnection();
 	}
 
+	public ProductTableModel productTableModel() {
+		return new ProductTableModel(getAllProducts());
+	}
+
 	// récupération des données sous forme d'ArrayList
 	public ArrayList<ProductModel> getAllProducts() {
 		ArrayList<ProductModel> allProducts = new ArrayList<ProductModel>();
 		
 		try {
 			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("select id_produit, ref_produit, nom_produit, desc_produit, qte_produit, duree_conservation, prix_unit, nom_cat, nom_fourn "
-					+ "from Produit P, Categorie C, Fournisseur F "
-					+ "where P.id_cat = C.id_cat and P.id_fourn = F.id_fourn "
-					+ "order by id_produit;");
+			ResultSet resultSet = statement.executeQuery("select * from Produit order by id_produit");
+					
 			while(resultSet.next()) {
 				ProductModel product = new ProductModel();
 				product.setId(resultSet.getInt("id_produit"));
@@ -30,8 +32,8 @@ public class ProductDAO {
 				product.setProdQuantity(resultSet.getInt("qte_produit"));
 				product.setProdExpTime(resultSet.getInt("duree_conservation"));
 				product.setProdUnitPrice(resultSet.getDouble("prix_unit"));
-				product.setProdCategory(resultSet.getString("nom_cat"));
-				product.setProdSupplier(resultSet.getString("nom_fourn"));
+				product.setProdCategory(resultSet.getInt("id_cat"));
+				product.setProdSupplier(resultSet.getInt("id_fourn"));
 				allProducts.add(product);
 			}
 		} catch (SQLException e) {
@@ -41,8 +43,56 @@ public class ProductDAO {
 		return allProducts;
 	}
 	
-	public ProductTableModel productTableModel() {
-		return new ProductTableModel(getAllProducts());
+	
+	public ProductModel getProduct(int id) {
+		ProductModel product = new ProductModel();
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from Produit where id_produit = "+id);
+			while(resultSet.next()) {
+				product.setId(id);
+				product.setProdRef(resultSet.getString("ref_produit"));
+				product.setProdName(resultSet.getString("nom_produit"));
+				product.setProdDesc(resultSet.getString("desc_produit"));
+				product.setProdQuantity(resultSet.getInt("qte_produit"));
+				product.setProdExpTime(resultSet.getInt("duree_conservation"));
+				product.setProdUnitPrice(resultSet.getDouble("prix_unit"));
+				product.setProdCategory(resultSet.getInt("id_cat"));
+				product.setProdSupplier(resultSet.getInt("id_fourn"));				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return product;
+	}
+	
+	public void editProduct(int id, ProductModel product) {
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement("update produit set "
+					+ "ref_produit = ?, "
+					+ "nom_produit = ?, "
+					+ "desc_produit = ?, "
+					+ "qte_produit = ?, "
+					+ "duree_conservation = ?, "
+					+ "prix_unit = ?, "
+					+ "id_cat = ?, "
+					+ "id_fourn = ? "
+					+ "where id_produit="+id+";");
+			
+			preparedStatement.setString(1, product.getProdRef());
+			preparedStatement.setString(2, product.getProdName());
+			preparedStatement.setString(3, product.getProdDesc());
+			preparedStatement.setInt(4, product.getProdQuantity());
+			preparedStatement.setInt(5, product.getProdExpTime());
+			preparedStatement.setDouble(6, product.getProdUnitPrice());
+			preparedStatement.setInt(7, product.getProdCategory());
+			preparedStatement.setInt(8, product.getProdSupplier());			
+			
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void deleteProduct(int id) {

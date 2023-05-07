@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 public class View {
 
@@ -32,8 +31,6 @@ public class View {
 		logout = new ImageIcon(getClass().getClassLoader().getResource("logout.png"));
 		
 		Color backgroundColor = new Color(0xbfe1fc);
-		Color blueColor = new Color(0x0088ff);
-		Border border = BorderFactory.createLineBorder(blueColor, 1, true);
 		
 		frame = new JFrame();
 		frame.setTitle("GeStock");
@@ -68,7 +65,7 @@ public class View {
 		mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.setForeground(new Color(0, 0, 0));
 		mainTabs.setBackground(new Color(248, 248, 255));
-		mainTabs.setFont(new Font("Arial", Font.PLAIN, 17));
+		mainTabs.setFont(new Font("Arial", Font.PLAIN, 18));
 		mainTabs.setSize(1350, 800);
 		mainTabs.setLocation((frame.getWidth() - mainTabs.getWidth())/2 , 20);
 		frame.getContentPane().add(mainTabs);
@@ -106,6 +103,22 @@ public class View {
 	
 	public JTable getProductTable() {
 		return productTable;
+	}
+
+	public JPanel getProductPanel() {
+		return productPanel;
+	}
+	
+	public JPanel getUsersPanel() {
+		return usersPanel;
+	}
+
+	public JPanel getSupplyPanel() {
+		return supplyPanel;
+	}
+	
+	public JTabbedPane getMainTabs() {
+		return mainTabs;
 	}
 	
 }

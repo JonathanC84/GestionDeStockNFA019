@@ -9,8 +9,8 @@ public class ProductModel {
 	private int prodQuantity;
 	private int prodExpTime;
 	private double prodUnitPrice;
-	private String prodCategory;
-	private String prodSupplier;
+	private int prodCategory;
+	private int prodSupplier;
 	
 	public ProductModel() {
 		this.id = 0;
@@ -20,8 +20,8 @@ public class ProductModel {
 		this.prodQuantity = 0;
 		this.prodExpTime = 0;
 		this.prodUnitPrice = 0;
-		this.prodCategory = "";
-		this.prodSupplier = "";		
+		this.prodCategory = 0;
+		this.prodSupplier = 0;		
 	}
 
 	public int getId() {
@@ -52,11 +52,11 @@ public class ProductModel {
 		return prodUnitPrice;
 	}
 
-	public String getProdCategory() {
+	public int getProdCategory() {
 		return prodCategory;
 	}
 
-	public String getProdSupplier() {
+	public int getProdSupplier() {
 		return prodSupplier;
 	}
 
@@ -88,11 +88,11 @@ public class ProductModel {
 		this.prodUnitPrice = prodUnitPrice;
 	}
 
-	public void setProdCategory(String prodCategory) {
+	public void setProdCategory(int prodCategory) {
 		this.prodCategory = prodCategory;
 	}
 
-	public void setProdSupplier(String prodSupplier) {
+	public void setProdSupplier(int prodSupplier) {
 		this.prodSupplier = prodSupplier;
 	}
 

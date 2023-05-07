@@ -13,7 +13,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class ProductTableModel extends AbstractTableModel {
 	
-	private	final String columns[] = {"Id", "Référence", "Nom", "Quantité", "PU", "Catégorie", "Fournisseur", "Editer", "Supprimer"};
+	private	final String columns[] = {"Id", "Réf.", "Nom", "Qté", "PU", "Description", "Catégorie", "Fournisseur", "Editer", "Supprimer"};
 	private ArrayList<ProductModel> allProducts;
 	
 	public ProductTableModel(ArrayList<ProductModel> allProducts) {
@@ -36,7 +36,7 @@ public class ProductTableModel extends AbstractTableModel {
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-		if (col == 7 || col == 8) {
+		if (col == 8 || col == 9) {
 			return ImageIcon.class;
 		} else {
 			return Object.class;
@@ -46,6 +46,10 @@ public class ProductTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int row, int col) {
 		ProductModel product = allProducts.get(row);
+		CategoryDAO categoryDAO = new CategoryDAO();
+		ArrayList<CategoryModel> categories = categoryDAO.getCategories();
+		SupplierDAO supplierDAO = new SupplierDAO();
+		ArrayList<SupplierModel> suppliers = supplierDAO.getSuppliers();
 		switch(col) {
 			case 0 : 
 				return product.getId();
@@ -58,12 +62,22 @@ public class ProductTableModel extends AbstractTableModel {
 			case 4 :
 				return product.getProdUnitPrice();
 			case 5 :
-				return product.getProdCategory();
+				return product.getProdDesc();
 			case 6 :
-				return product.getProdSupplier();
+				for(CategoryModel category : categories) {
+					if(category.getId() == product.getProdCategory()) {
+						return category.getCatName();
+					}
+				};
 			case 7 :
-				return new ImageIcon(getClass().getClassLoader().getResource("modify16.png"));
+				for(SupplierModel supplier : suppliers) {
+					if(supplier.getId() == product.getProdSupplier()) {
+						return supplier.getSupplierName();
+					}
+				};
 			case 8 :
+				return new ImageIcon(getClass().getClassLoader().getResource("modify16.png"));
+			case 9 :
 				return new ImageIcon(getClass().getClassLoader().getResource("delete16.png"));
 			default : 
 				return null;
@@ -71,12 +85,12 @@ public class ProductTableModel extends AbstractTableModel {
 	
 	}
 
-	// les colonnes 7 et 8 (éditer et supprimer) deviennent editables afin d'activer les ButtonColumn
+	// les colonnes "éditer" et "supprimer" deviennent editables afin d'activer les ButtonColumn
 	@Override
 	public boolean isCellEditable(int row, int col) {
 	     switch (col) {
-	         case 7:
 	         case 8:
+	         case 9:
 	             return true;
 	         default:
 	             return false;

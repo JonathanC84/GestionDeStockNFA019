@@ -10,6 +10,8 @@ public class Launch {
 		
 		LoginView loginView = new LoginView();
 		View view = new View();
+		
+		@SuppressWarnings("unused")
 		MainController controller1 = new MainController(loginView, view);
 		
 		// au lancement de l'application on appelle la fenêtre login
