@@ -74,7 +74,6 @@ public class View {
 		
 		productTable = new JTable();
 		productTable.setPreferredScrollableViewportSize(new Dimension(1300, 400));
-		//productTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		productTable.setRowHeight(30);
 		productTable.setFont(new Font("Arial", Font.PLAIN, 16));
 

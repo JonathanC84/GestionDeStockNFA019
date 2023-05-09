@@ -11,6 +11,7 @@ public class ProductModel {
 	private double prodUnitPrice;
 	private int prodCategory;
 	private int prodSupplier;
+	private boolean isVisible;
 	
 	public ProductModel() {
 		this.id = 0;
@@ -22,6 +23,7 @@ public class ProductModel {
 		this.prodUnitPrice = 0;
 		this.prodCategory = 0;
 		this.prodSupplier = 0;		
+		this.isVisible = true;
 	}
 
 	public int getId() {
@@ -59,6 +61,10 @@ public class ProductModel {
 	public int getProdSupplier() {
 		return prodSupplier;
 	}
+	
+	public boolean getIsVisible() {
+		return isVisible;
+	}
 
 	public void setId(int id) {
 		this.id = id;
@@ -94,6 +100,10 @@ public class ProductModel {
 
 	public void setProdSupplier(int prodSupplier) {
 		this.prodSupplier = prodSupplier;
+	}
+	
+	public void setIsVisible(boolean isVisible) {
+		this.isVisible = isVisible;
 	}
 
 	@Override

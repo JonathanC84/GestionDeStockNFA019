@@ -37,8 +37,6 @@ public class MovementTableModel extends AbstractTableModel {
 	
 	@Override
 	public Class<?> getColumnClass(int col) {
-//		if (col == 1) return LocalDateTime.class;
-//		else
 		return Object.class;
 	}
 	

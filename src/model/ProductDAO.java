@@ -12,7 +12,13 @@ public class ProductDAO {
 	}
 
 	public ProductTableModel productTableModel(String userRole) {
-		return new ProductTableModel(getAllProducts(), userRole);
+		ArrayList<ProductModel> allProducts = getAllProducts();
+		ArrayList<ProductModel> allVisibleProducts = new ArrayList<ProductModel>();
+		for(ProductModel product : allProducts) {
+			if(product.getIsVisible() == true)
+				allVisibleProducts.add(product);
+		}
+		return new ProductTableModel(allVisibleProducts, userRole);
 	}
 
 	// récupération des données sous forme d'ArrayList
@@ -34,6 +40,7 @@ public class ProductDAO {
 				product.setProdUnitPrice(resultSet.getDouble("prix_unit"));
 				product.setProdCategory(resultSet.getInt("id_cat"));
 				product.setProdSupplier(resultSet.getInt("id_fourn"));
+				product.setIsVisible(resultSet.getBoolean("est_visible"));
 				allProducts.add(product);
 			}
 		} catch (SQLException e) {
@@ -58,7 +65,8 @@ public class ProductDAO {
 				product.setProdExpTime(resultSet.getInt("duree_conservation"));
 				product.setProdUnitPrice(resultSet.getDouble("prix_unit"));
 				product.setProdCategory(resultSet.getInt("id_cat"));
-				product.setProdSupplier(resultSet.getInt("id_fourn"));				
+				product.setProdSupplier(resultSet.getInt("id_fourn"));
+				product.setIsVisible(resultSet.getBoolean("est_visible"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -119,7 +127,7 @@ public class ProductDAO {
 	
 	public void deleteProduct(int id) {
 		try {
-			PreparedStatement preparedStatement = connection.prepareStatement("delete from produit where id_produit="+id);
+			PreparedStatement preparedStatement = connection.prepareStatement("update produit set est_visible = 0 where id_produit="+id);
 			
 			preparedStatement.executeUpdate();
 			preparedStatement.close();

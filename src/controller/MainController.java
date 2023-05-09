@@ -15,11 +15,11 @@ public class MainController {
 	private UserDAO userDAO;
 	private ProductController productController;
 	private MovementController movementController;
-	
+
 	public MainController() {
-		
+
 	}
-	
+
 	public MainController(LoginView loginView, View view) {
 		this.loginView = loginView;
 		this.view = view;
@@ -28,14 +28,14 @@ public class MainController {
 		movementController = new MovementController();
 		initController();
 	}
-	
+
 	public void initController() {
 		loginView.getUserNameField().addActionListener(e -> authentification());
 		loginView.getPasswordField().addActionListener(e -> authentification());
 		loginView.getLoginButton().addActionListener(e -> authentification());
 	}
-	
-	
+
+
 	private void authentification() {
 		String user = loginView.getUserNameField().getText();
 		char[] pass = loginView.getPasswordField().getPassword();
@@ -43,7 +43,7 @@ public class MainController {
 		for (int i = 0; i < pass.length; i++) {
 			password += pass[i];
 		}
-				
+
 		if(user.isEmpty() || password.isEmpty()) {
 			JOptionPane.showMessageDialog(loginView.frame, "Veuillez renseigner tous les champs");
 		} else {
@@ -58,20 +58,20 @@ public class MainController {
 			}
 		}
 	}
-	
+
 	public void initView(HashMap<String,String> userDetails) {
-		
+
 		loginView.frame.dispose();
-		
+
 		String userName = userDetails.get("prenom");
 		String userRole = userDetails.get("role");
-		
+
 		view.frame.setVisible(true);
 		view.getMainTabs().setSelectedComponent(view.getProductPanel());
 		view.getWelcomeLabel().setText("Bienvenue "+userName+" ("+userRole+")");
 		view.getLogoutBtn().addActionListener(e -> disconnection());
 		view.getAddProductBtn().addActionListener(e -> productController.addProduct(view, userRole));
-		
+
 		if(userDetails.get("role").equals("gestionnaire")) {
 			view.getUsersPanel().setVisible(false);
 			view.getMainTabs().remove(view.getUsersPanel());
@@ -83,20 +83,20 @@ public class MainController {
 			view.getMainTabs().remove(view.getSupplyPanel());
 			view.getProductPanel().remove(view.getAddProductBtn());
 		}
-		
+
 		JTable productTable = new JTable();
 		productTable = view.getProductTable();
 		productController.initializeProductTable(view, productTable, userDetails.get("role"));
-		
+
 		JTable entrieTable = new JTable();
 		entrieTable = view.getEntrieTable();
 		movementController.initializeEntrieTable(entrieTable);
-		
+
 		JTable removalTable = new JTable();
 		removalTable = view.getRemovalTable();
 		movementController.initializeRemovalTable(removalTable);	
 	}	
-	
+
 	public void disconnection() {
 		view.frame.dispose();
 		loginView = new LoginView();
@@ -104,5 +104,5 @@ public class MainController {
 		loginView.frame.setVisible(true);
 		initController();
 	}
-	
+
 }
