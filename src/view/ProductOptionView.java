@@ -20,7 +20,6 @@ import model.*;
  *
  */
 
-
 public class ProductOptionView {
 
 	private JPanel panel;

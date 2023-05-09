@@ -5,8 +5,8 @@ import javax.swing.ImageIcon;
 import javax.swing.table.AbstractTableModel;
 
 /**
- * Classe qui permet de transformer l'ArrayList contenant les données récupérées en base
- * en TableModel afin d'afficher les données sous forme de JTable
+ * Classe qui permet de transformer en TableModel l'ArrayList contenant les données
+ * récupérées dans la base afin d'afficher les données sous forme de JTable
  * @author Jonathan Cayrol *
  */
 
@@ -72,15 +72,11 @@ public class ProductTableModel extends AbstractTableModel {
 			return product.getProdDesc();
 		case 6 :
 			for(CategoryModel category : categories) {
-				if(category.getId() == product.getProdCategory()) {
-					return category.getCatName();
-				}
+				if(category.getId() == product.getProdCategory()) return category.getCatName();
 			};
 		case 7 :
 			for(SupplierModel supplier : suppliers) {
-				if(supplier.getId() == product.getProdSupplier()) {
-					return supplier.getSupplierName();
-				}
+				if(supplier.getId() == product.getProdSupplier()) return supplier.getSupplierName();
 			};
 		case 8 :
 			return new ImageIcon(getClass().getClassLoader().getResource("modify16.png"));

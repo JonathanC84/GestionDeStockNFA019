@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.*;
-import javax.swing.border.Border;
 
 public class View {
 
@@ -98,7 +97,9 @@ public class View {
 		entriePanel = new JPanel();
 		entriePanel.setBorder(BorderFactory.createTitledBorder("Entrées"));
 		entrieTable = new JTable(); 
-		entrieTable.setPreferredScrollableViewportSize(new Dimension(632,240));
+		entrieTable.setPreferredScrollableViewportSize(new Dimension(632,210));
+		entrieTable.setRowHeight(20);
+		entrieTable.setFont(new Font("Arial", Font.PLAIN, 14));
 		entrieScroll = new JScrollPane(entrieTable);
 		entriePanel.add(entrieScroll);
 		movementPanel.add(entriePanel);
@@ -107,7 +108,9 @@ public class View {
 		removalPanel = new JPanel();
 		removalPanel.setBorder(BorderFactory.createTitledBorder("Sorties"));
 		removalTable = new JTable();
-		removalTable.setPreferredScrollableViewportSize(new Dimension(632,240));
+		removalTable.setPreferredScrollableViewportSize(new Dimension(632,210));
+		removalTable.setRowHeight(20);
+		removalTable.setFont(new Font("Arial", Font.PLAIN, 14));
 		removalScroll = new JScrollPane(removalTable);
 		removalPanel.add(removalScroll);
 		movementPanel.add(removalPanel);
@@ -138,6 +141,14 @@ public class View {
 		return productPanel;
 	}
 	
+	public JTable getEntrieTable() {
+		return entrieTable;
+	}
+
+	public JTable getRemovalTable() {
+		return removalTable;
+	}
+
 	public JPanel getUsersPanel() {
 		return usersPanel;
 	}

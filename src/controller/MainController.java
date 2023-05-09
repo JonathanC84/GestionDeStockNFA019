@@ -13,9 +13,8 @@ public class MainController {
 	private LoginView loginView;
 	private View view;
 	private UserDAO userDAO;
-	@SuppressWarnings("unused")
-	private ProductDAO productDAO;
 	private ProductController productController;
+	private MovementController movementController;
 	
 	public MainController() {
 		
@@ -25,12 +24,11 @@ public class MainController {
 		this.loginView = loginView;
 		this.view = view;
 		userDAO = new UserDAO();
-		productDAO = new ProductDAO();
 		productController = new ProductController();
+		movementController = new MovementController();
 		initController();
 	}
 	
-	// initalisation des méthodes pour la fenêtre login
 	public void initController() {
 		loginView.getUserNameField().addActionListener(e -> authentification());
 		loginView.getPasswordField().addActionListener(e -> authentification());
@@ -38,7 +36,6 @@ public class MainController {
 	}
 	
 	
-	// méthode pour authentifier l'utilisateur, appelle la méthode initView
 	private void authentification() {
 		String user = loginView.getUserNameField().getText();
 		char[] pass = loginView.getPasswordField().getPassword();
@@ -62,22 +59,19 @@ public class MainController {
 		}
 	}
 	
-	/* si l'authentification est réussie, méthode qui cache la fenêtre login
-	   et ouvre la fenêtre principale avec affichage des données */
 	public void initView(HashMap<String,String> userDetails) {
+		
+		loginView.frame.dispose();
+		
 		String userName = userDetails.get("prenom");
 		String userRole = userDetails.get("role");
-		loginView.frame.dispose();
-		view.getMainTabs().setSelectedComponent(view.getProductPanel());
+		
 		view.frame.setVisible(true);
-
-		// récupère et affiche le prénom et le rôle de l'utilisateur
+		view.getMainTabs().setSelectedComponent(view.getProductPanel());
 		view.getWelcomeLabel().setText("Bienvenue "+userName+" ("+userRole+")");
-		// le bouton logout appelle la méthode de déconnexion de l'utilisateur
 		view.getLogoutBtn().addActionListener(e -> disconnection());
 		view.getAddProductBtn().addActionListener(e -> productController.addProduct(view, userRole));
 		
-		// gère l'affichage en fonction des droits utilisateur
 		if(userDetails.get("role").equals("gestionnaire")) {
 			view.getUsersPanel().setVisible(false);
 			view.getMainTabs().remove(view.getUsersPanel());
@@ -90,15 +84,19 @@ public class MainController {
 			view.getProductPanel().remove(view.getAddProductBtn());
 		}
 		
-		
 		JTable productTable = new JTable();
 		productTable = view.getProductTable();
-				
-		productController.initializeProductTable(productTable, userDetails.get("role"));
+		productController.initializeProductTable(view, productTable, userDetails.get("role"));
 		
+		JTable entrieTable = new JTable();
+		entrieTable = view.getEntrieTable();
+		movementController.initializeEntrieTable(entrieTable);
+		
+		JTable removalTable = new JTable();
+		removalTable = view.getRemovalTable();
+		movementController.initializeRemovalTable(removalTable);	
 	}	
 	
-	// méthode qui déconnecte l'utilisateur actuel et qui retourne à la page login (appelée par le bouton logout)
 	public void disconnection() {
 		view.frame.dispose();
 		loginView = new LoginView();
