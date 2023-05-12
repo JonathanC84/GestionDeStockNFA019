@@ -11,14 +11,23 @@ public class ProductDAO {
 		connection = Connector.getConnection();
 	}
 
-	public ProductTableModel productTableModel(String userRole) {
+	public ProductTableModel defaultProductTableModel(String userRole) {
 		ArrayList<ProductModel> allProducts = getAllProducts();
-		ArrayList<ProductModel> allVisibleProducts = new ArrayList<ProductModel>();
+		ArrayList<ProductModel> visibleProducts = new ArrayList<ProductModel>();
 		for(ProductModel product : allProducts) {
 			if(product.getIsVisible() == true)
-				allVisibleProducts.add(product);
+				visibleProducts.add(product);
 		}
-		return new ProductTableModel(allVisibleProducts, userRole);
+		return new ProductTableModel(visibleProducts, userRole);
+	}
+	
+	public ProductTableModel specialProductTableModel(ArrayList<ProductModel> products, String userRole) {
+		ArrayList<ProductModel> visibleProducts = new ArrayList<ProductModel>();
+		for(ProductModel product : products) {
+			if(product.getIsVisible() == true)
+				visibleProducts.add(product);
+		}
+		return new ProductTableModel(visibleProducts, userRole);
 	}
 
 	// récupération des données sous forme d'ArrayList
@@ -72,6 +81,110 @@ public class ProductDAO {
 			e.printStackTrace();
 		}
 		return product;
+	}
+	
+	public ArrayList<ProductModel> searchProductByName(String searchInput) {
+		ArrayList<ProductModel> productsFound = new ArrayList<ProductModel>();
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from Produit "
+					+ "where nom_produit like '%"+searchInput+"%';");
+			while (resultSet.next()) {
+				ProductModel product = new ProductModel();
+				product.setId(resultSet.getInt("id_produit"));
+				product.setProdRef(resultSet.getString("ref_produit"));
+				product.setProdName(resultSet.getString("nom_produit"));
+				product.setProdDesc(resultSet.getString("desc_produit"));
+				product.setProdQuantity(resultSet.getInt("qte_produit"));
+				product.setProdExpTime(resultSet.getInt("duree_conservation"));
+				product.setProdUnitPrice(resultSet.getDouble("prix_unit"));
+				product.setProdCategory(resultSet.getInt("id_cat"));
+				product.setProdSupplier(resultSet.getInt("id_fourn"));
+				product.setIsVisible(resultSet.getBoolean("est_visible"));
+				productsFound.add(product);
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return productsFound;
+	}
+	
+	public ArrayList<ProductModel> searchProductByRef(String searchInput) {
+		ArrayList<ProductModel> productsFound = new ArrayList<ProductModel>();
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from Produit "
+					+ "where ref_produit like '%"+searchInput+"%';");
+			while (resultSet.next()) {
+				ProductModel product = new ProductModel();
+				product.setId(resultSet.getInt("id_produit"));
+				product.setProdRef(resultSet.getString("ref_produit"));
+				product.setProdName(resultSet.getString("nom_produit"));
+				product.setProdDesc(resultSet.getString("desc_produit"));
+				product.setProdQuantity(resultSet.getInt("qte_produit"));
+				product.setProdExpTime(resultSet.getInt("duree_conservation"));
+				product.setProdUnitPrice(resultSet.getDouble("prix_unit"));
+				product.setProdCategory(resultSet.getInt("id_cat"));
+				product.setProdSupplier(resultSet.getInt("id_fourn"));
+				product.setIsVisible(resultSet.getBoolean("est_visible"));
+				productsFound.add(product);
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return productsFound;
+	}
+	
+	public ArrayList<ProductModel> searchProductBySupplier(String searchInput) {
+		ArrayList<ProductModel> productsFound = new ArrayList<ProductModel>();
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from Produit where id_fourn in "
+					+ "(select id_fourn from fournisseur where nom_fourn like '%"+searchInput+"%');");
+			while (resultSet.next()) {
+				ProductModel product = new ProductModel();
+				product.setId(resultSet.getInt("id_produit"));
+				product.setProdRef(resultSet.getString("ref_produit"));
+				product.setProdName(resultSet.getString("nom_produit"));
+				product.setProdDesc(resultSet.getString("desc_produit"));
+				product.setProdQuantity(resultSet.getInt("qte_produit"));
+				product.setProdExpTime(resultSet.getInt("duree_conservation"));
+				product.setProdUnitPrice(resultSet.getDouble("prix_unit"));
+				product.setProdCategory(resultSet.getInt("id_cat"));
+				product.setProdSupplier(resultSet.getInt("id_fourn"));
+				product.setIsVisible(resultSet.getBoolean("est_visible"));
+				productsFound.add(product);
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return productsFound;
+	}
+	
+	public ArrayList<ProductModel> searchProductByCategory(String searchInput) {
+		ArrayList<ProductModel> productsFound = new ArrayList<ProductModel>();
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery("select * from Produit where id_cat in "
+					+ "(select id_cat from categorie where nom_cat like '%"+searchInput+"%');");
+			while (resultSet.next()) {
+				ProductModel product = new ProductModel();
+				product.setId(resultSet.getInt("id_produit"));
+				product.setProdRef(resultSet.getString("ref_produit"));
+				product.setProdName(resultSet.getString("nom_produit"));
+				product.setProdDesc(resultSet.getString("desc_produit"));
+				product.setProdQuantity(resultSet.getInt("qte_produit"));
+				product.setProdExpTime(resultSet.getInt("duree_conservation"));
+				product.setProdUnitPrice(resultSet.getDouble("prix_unit"));
+				product.setProdCategory(resultSet.getInt("id_cat"));
+				product.setProdSupplier(resultSet.getInt("id_fourn"));
+				product.setIsVisible(resultSet.getBoolean("est_visible"));
+				productsFound.add(product);
+			}			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return productsFound;
 	}
 	
 	public void addProduct(ProductModel product) {

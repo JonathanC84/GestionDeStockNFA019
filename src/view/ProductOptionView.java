@@ -8,8 +8,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+
 import model.*;
 
 /**
@@ -23,7 +27,8 @@ import model.*;
 public class ProductOptionView {
 
 	private JPanel panel;
-	private JTextField refField, nameField, quantityField, unitPriceField, expTimeField;
+	private JTextField refField, nameField, quantityField, expTimeField;
+	private JSpinner unitPriceField;
 	private JTextArea descField;
 	private JComboBox<String> categoryField, supplierField;
     private JLabel refLabel, nameLabel, descLabel, quantityLabel, unitPriceLabel, expTimeLabel, categoryLabel, supplierLabel;
@@ -97,9 +102,16 @@ public class ProductOptionView {
 		quantityLabel.setLabelFor(descField);
 		quantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		unitPriceField = new JTextField(20);
+		SpinnerModel priceModel = new SpinnerNumberModel(
+			0.0,
+			0.0,
+			9999.99,
+			0.01
+		);
+		
+		unitPriceField = new JSpinner(priceModel);
 		unitPriceField.setFont(font);
-		unitPriceField.setText(String.valueOf(product.getProdUnitPrice()));
+		unitPriceField.setValue(product.getProdUnitPrice());
 		unitPriceField.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
 		unitPriceLabel = new JLabel("Prix/unité");
@@ -170,7 +182,8 @@ public class ProductOptionView {
 	}
 
 	public double getUnitPriceField() {
-		return Double.parseDouble(unitPriceField.getText());
+		return Double.parseDouble(unitPriceField.getValue().toString());
+		//return Double.parseDouble(unitPriceField.getText());
 	}
 
 	public int getExpTimeField() {

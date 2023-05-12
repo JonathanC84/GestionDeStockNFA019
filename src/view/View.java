@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.ArrayList;
 import javax.swing.*;
 
 public class View {
@@ -11,9 +12,12 @@ public class View {
 	public JFrame frame;
 	private JPanel header;
 	private JLabel welcomeLabel;
-	private JButton logoutBtn, addProductBtn;
+	private JButton logoutBtn, addProductBtn, searchBtn;
+	private JTextField searchField;
+	private ArrayList<String> searchTypes;
+	private JComboBox<String> searchTypeSelection;
 	private JTabbedPane mainTabs;
-	private JPanel productPanel, usersPanel, supplyPanel, movementPanel, entriePanel, removalPanel;
+	private JPanel productPanel, usersPanel, supplyPanel, movementPanel, entriePanel, removalPanel, searchPanel;
 	private JScrollPane productScroll, entrieScroll, removalScroll;
 	private JTable productTable, entrieTable, removalTable;
 	private ImageIcon icon, logout;
@@ -27,7 +31,9 @@ public class View {
 		icon = new ImageIcon(getClass().getClassLoader().getResource("logo32.png"));
 		logout = new ImageIcon(getClass().getClassLoader().getResource("logout.png"));
 		
-		Color backgroundColor = new Color(0xbfe1fc);
+		Font font14 = new Font("Arial", Font.PLAIN, 14);
+		Font font16 = new Font("Arial", Font.PLAIN, 16);
+		Font font18 = new Font("Arial", Font.PLAIN, 18);
 		
 		frame = new JFrame();
 		frame.setTitle("GeStock");
@@ -37,7 +43,7 @@ public class View {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);
 		frame.setIconImage(icon.getImage());
-		frame.getContentPane().setBackground(backgroundColor);
+		frame.getContentPane().setBackground(new Color(0xbfe1fc));
 		
 		header = new JPanel();
 		header.setSize(1350, 30);
@@ -48,7 +54,7 @@ public class View {
 		
 		welcomeLabel = new JLabel();
 		welcomeLabel.setText("Bienvenue sur GeStock !");
-		welcomeLabel.setFont(new Font("Arial", Font.PLAIN, 18));
+		welcomeLabel.setFont(font18);
 		welcomeLabel.setLayout(null);
 		header.add(welcomeLabel);
 		
@@ -62,7 +68,7 @@ public class View {
 		mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.setForeground(new Color(0, 0, 0));
 		mainTabs.setBackground(new Color(248, 248, 255));
-		mainTabs.setFont(new Font("Arial", Font.PLAIN, 18));
+		mainTabs.setFont(font18);
 		mainTabs.setSize(1350, 800);
 		mainTabs.setLocation((frame.getWidth() - mainTabs.getWidth())/2 , 20);
 		frame.getContentPane().add(mainTabs);
@@ -75,16 +81,44 @@ public class View {
 		productTable = new JTable();
 		productTable.setPreferredScrollableViewportSize(new Dimension(1300, 400));
 		productTable.setRowHeight(30);
-		productTable.setFont(new Font("Arial", Font.PLAIN, 16));
+		productTable.setFont(font16);
 
 		productScroll = new JScrollPane(productTable);
 		productPanel.add(productScroll);
 
+		searchPanel = new JPanel();
+		productPanel.add(searchPanel);
+		
+		searchField = new JTextField(25);
+		searchField.setFont(font16);
+
+		searchTypes = new ArrayList<String>();
+		searchTypes.add("par libellé");
+		searchTypes.add("par référence");
+		searchTypes.add("par fournisseur");
+		searchTypes.add("par catégorie");
+		
+		searchTypeSelection = new JComboBox<String>();
+		for(String type : searchTypes) {
+			searchTypeSelection.addItem(type);
+		}
+		searchTypeSelection.setBackground(Color.white);
+		searchTypeSelection.setFont(font16);
+		
+		searchBtn = new JButton("Rechercher produit");
+		searchBtn.setToolTipText("Rechercher un produit");
+		searchBtn.setPreferredSize(new Dimension(200,40));
+		searchBtn.setFont(font18);
+		
+		searchPanel.add(searchField);
+		searchPanel.add(searchTypeSelection);
+		searchPanel.add(searchBtn);
+		
 		// bouton ajouter produit
 		addProductBtn = new JButton("Ajouter produit");
 		addProductBtn.setToolTipText("Créer une ligne produit");
 		addProductBtn.setPreferredSize(new Dimension(200,40));
-		addProductBtn.setFont(new Font("Arial", Font.PLAIN, 18));
+		addProductBtn.setFont(font18);
 		productPanel.add(addProductBtn);
 		
 		// panel mouvements
@@ -98,7 +132,7 @@ public class View {
 		entrieTable = new JTable(); 
 		entrieTable.setPreferredScrollableViewportSize(new Dimension(632,210));
 		entrieTable.setRowHeight(20);
-		entrieTable.setFont(new Font("Arial", Font.PLAIN, 14));
+		entrieTable.setFont(font14);
 		entrieScroll = new JScrollPane(entrieTable);
 		entriePanel.add(entrieScroll);
 		movementPanel.add(entriePanel);
@@ -109,7 +143,7 @@ public class View {
 		removalTable = new JTable();
 		removalTable.setPreferredScrollableViewportSize(new Dimension(632,210));
 		removalTable.setRowHeight(20);
-		removalTable.setFont(new Font("Arial", Font.PLAIN, 14));
+		removalTable.setFont(font14);
 		removalScroll = new JScrollPane(removalTable);
 		removalPanel.add(removalScroll);
 		movementPanel.add(removalPanel);
@@ -122,6 +156,18 @@ public class View {
 		usersPanel = new JPanel();
 		mainTabs.addTab("Utilisateurs", null, usersPanel, null);
 
+	}
+
+	public JButton getSearchBtn() {
+		return searchBtn;
+	}
+
+	public JTextField getSearchField() {
+		return searchField;
+	}
+
+	public JComboBox<String> getSearchTypeSelection() {
+		return searchTypeSelection;
 	}
 
 	public JLabel getWelcomeLabel() {

@@ -2,6 +2,7 @@ package controller;
 
 import model.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -13,18 +14,16 @@ public class ProductController {
 
 	private ProductDAO productDAO = new ProductDAO();
 	private MovementController movementController = new MovementController();
+	//private ArrayList<ProductModel> allProducts = productDAO.getAllProducts();
 	// taille des colonnes de la table Produits
 	static int COLUMN_SIZES[] = {50, 150, 200, 50, 75, 200, 150, 150, 75, 75};
 	// version commercial
 	static int COLUMN_SIZES_MIN[] = {50, 150, 200, 50, 75, 200, 150, 150};
 
-	// méthode qui initialise la table (ou l'actualise après changement)
+	// initialistation de la table produits avec les données (par défaut tous les produits)
 	public void initializeProductTable(View view, JTable productTable, String userRole) {
-		
-		// affichage de la table Produits en utilisant la classe ProductTableModel et deux colonnes Boutons
-		// pour éditer et supprimer une ligne (classe ButtonColumn) en fonction des droits utilisateurs
-		
-		productTable.setModel(productDAO.productTableModel(userRole));
+
+		productTable.setModel(productDAO.defaultProductTableModel(userRole));
 		productTable.setAutoCreateRowSorter(true);
 
 		if(!userRole.equals("commercial")) {
@@ -34,14 +33,53 @@ public class ProductController {
 			ButtonColumn deleteButton = new ButtonColumn(productTable, deleteProduct(view, userRole), 9);
 			changeColumnWidth(productTable, COLUMN_SIZES);
 		} else changeColumnWidth(productTable, COLUMN_SIZES_MIN);
-		
+
 	}
 
-	// méthode qui permet de régler la taille des colonnes individuellement avec le tableau fourni
+	// table produits avec données filtrées (recherche)
+	public void refreshProductTable(View view, JTable productTable, ArrayList<ProductModel> products, String userRole) {
+
+		productTable.setModel(productDAO.specialProductTableModel(products, userRole));
+		productTable.setAutoCreateRowSorter(true);
+
+		if(!userRole.equals("commercial")) {
+			@SuppressWarnings("unused")
+			ButtonColumn editButton = new ButtonColumn(productTable, editProduct(view, userRole), 8);
+			@SuppressWarnings("unused")
+			ButtonColumn deleteButton = new ButtonColumn(productTable, deleteProduct(view, userRole), 9);
+			changeColumnWidth(productTable, COLUMN_SIZES);
+		} else changeColumnWidth(productTable, COLUMN_SIZES_MIN);
+
+	}
+
 	public void changeColumnWidth(JTable table, int[] COLUMN_SIZES) {
 		for (int i = 0; i < COLUMN_SIZES.length; i++) {
 			table.getColumnModel().getColumn(i).setPreferredWidth(COLUMN_SIZES[i]);
 		}
+	}
+
+	public void searchProduct(View view, String userRole) {
+		JTable tableProduct = view.getProductTable();
+		// index du JComboBox : 0 libellé, 1 référence, 2 fournisseur, 3 catégorie
+		int searchType = view.getSearchTypeSelection().getSelectedIndex();
+		String searchText = view.getSearchField().getText();
+		ArrayList<ProductModel> products = new ArrayList<ProductModel>();
+		switch(searchType) {
+		case 0 : 
+			products = productDAO.searchProductByName(searchText);
+			break;
+		case 1 :
+			products = productDAO.searchProductByRef(searchText);
+			break;
+		case 2 :
+			products = productDAO.searchProductBySupplier(searchText);
+			break;
+		case 3 :
+			products = productDAO.searchProductByCategory(searchText);
+			break;
+		default: return;
+		}
+		refreshProductTable(view, tableProduct, products, userRole);
 	}
 
 	public void addProduct(View view, String userRole) {
@@ -49,11 +87,10 @@ public class ProductController {
 		ProductModel newProduct = new ProductModel();
 		ImageIcon editIcon = new ImageIcon(getClass().getClassLoader().getResource("modify32.png"));
 		ProductOptionView pov = new ProductOptionView();
-		
-		// appel d'une boîte de dialogue implémentant le panel de la vue ProductOptionView
+
 		int option = JOptionPane.showConfirmDialog(null, pov.getPanel(newProduct) , "Ajout d'une ligne "
 				+ "produit", JOptionPane.OK_CANCEL_OPTION, 1, editIcon);
-		
+
 		if(option == JOptionPane.OK_OPTION) {
 			try {
 				newProduct.setProdRef(pov.getRefField());
@@ -108,7 +145,7 @@ public class ProductController {
 						product.setProdCategory(pov.getCategoryField());
 						product.setProdSupplier(pov.getSupplierField());
 						productDAO.editProduct(productId, product);
-						
+
 						if(product.getProdQuantity() != productInitialQuantity) {
 							if(product.getProdQuantity() > productInitialQuantity)
 							{
@@ -140,14 +177,14 @@ public class ProductController {
 				JTable table = (JTable) e.getSource();
 				int modelRow = Integer.valueOf(e.getActionCommand());
 				int productId = (int) table.getModel().getValueAt(modelRow, 0);
-				
+
 				ProductModel productToDelete = productDAO.getProduct(productId);
-		
+
 				ImageIcon deleteIcon = new ImageIcon(getClass().getClassLoader().getResource("delete32.png"));
 
 				int option = JOptionPane.showConfirmDialog(null, "Êtes-vous sûr de vouloir supprimer "
 						+ "cette ligne produit ?", "Suppression "
-						+productToDelete.getProdName(), JOptionPane.YES_NO_OPTION, 1, deleteIcon);
+								+productToDelete.getProdName(), JOptionPane.YES_NO_OPTION, 1, deleteIcon);
 
 				if(option == JOptionPane.OK_OPTION) {
 					try {

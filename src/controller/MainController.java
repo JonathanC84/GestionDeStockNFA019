@@ -3,7 +3,6 @@ package controller;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-
 import view.LoginView;
 import view.View;
 import model.*;
@@ -54,7 +53,7 @@ public class MainController {
 				}
 				initView(userDAO.getUserDetails(user));
 			} else {
-				JOptionPane.showMessageDialog(loginView.frame, "Nom d'utilisateur ou mot de passe incorrects");
+				JOptionPane.showMessageDialog(loginView.frame, "Nom d'utilisateur ou mot de passe incorrect");
 			}
 		}
 	}
@@ -71,11 +70,13 @@ public class MainController {
 		view.getWelcomeLabel().setText("Bienvenue "+userName+" ("+userRole+")");
 		view.getLogoutBtn().addActionListener(e -> disconnection());
 		view.getAddProductBtn().addActionListener(e -> productController.addProduct(view, userRole));
+		view.getSearchField().addActionListener(e -> productController.searchProduct(view, userRole));
+		view.getSearchBtn().addActionListener(e -> productController.searchProduct(view, userRole));
 
-		if(userDetails.get("role").equals("gestionnaire")) {
+		if(userRole.equals("gestionnaire")) {
 			view.getUsersPanel().setVisible(false);
 			view.getMainTabs().remove(view.getUsersPanel());
-		} else if(userDetails.get("role").equals("commercial")) {
+		} else if(userRole.equals("commercial")) {
 			view.getUsersPanel().setVisible(false);
 			view.getSupplyPanel().setVisible(false);
 			view.getAddProductBtn().setVisible(false);
@@ -86,7 +87,7 @@ public class MainController {
 
 		JTable productTable = new JTable();
 		productTable = view.getProductTable();
-		productController.initializeProductTable(view, productTable, userDetails.get("role"));
+		productController.initializeProductTable(view, productTable, userRole);
 
 		JTable entrieTable = new JTable();
 		entrieTable = view.getEntrieTable();

@@ -7,14 +7,11 @@ import javax.swing.*;
 public class LoginView {
 
 	public JFrame frame;
-	private JLabel welcomeLabel;
-	private JLabel userNameLabel;
-	private JLabel passwordLabel;
+	private JLabel welcomeLabel, userNameLabel, passwordLabel;
 	private JTextField userNameField;
 	private JPasswordField passwordField;
 	private JButton loginButton;
-	private ImageIcon icon;
-	private ImageIcon logo;
+	private ImageIcon icon, logo;
 
 	public LoginView() {
 		initialize();
@@ -57,10 +54,9 @@ public class LoginView {
 		frame.add(welcomeLabel);
 		
 		//champ du nom d'utilisateur
-		userNameLabel = new JLabel();
+		userNameLabel = new JLabel("Login :");
 		userNameLabel.setBounds(350, 400, 300, 24);
 		userNameLabel.setFont(fieldFont);
-		userNameLabel.setText("Login :");
 		userNameLabel.setLabelFor(userNameField);
 		userNameLabel.setHorizontalAlignment(JLabel.LEFT);
 		userNameLabel.setForeground(blueColor);
@@ -72,10 +68,9 @@ public class LoginView {
 		frame.add(userNameField);
 		
 		//champ du mot de passe utilisateur
-		passwordLabel = new JLabel();
+		passwordLabel = new JLabel("Mot de passe :");
 		passwordLabel.setBounds(350, 480, 300, 24);
 		passwordLabel.setFont(fieldFont);
-		passwordLabel.setText("Mot de passe :");
 		passwordLabel.setLabelFor(passwordField);
 		passwordLabel.setHorizontalAlignment(JLabel.LEFT);
 		passwordLabel.setForeground(blueColor);

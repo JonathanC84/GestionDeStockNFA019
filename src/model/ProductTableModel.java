@@ -13,8 +13,8 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class ProductTableModel extends AbstractTableModel {
 
-	private	final String columns[] = {"Id", "Réf.", "Nom", "Qté", "PU", "Description", "Catégorie", "Fournisseur", "Editer", "Supprimer"};
-	private	final String columnsMin[] = {"Id", "Réf.", "Nom", "Qté", "PU", "Description", "Catégorie", "Fournisseur"};
+	private	final String columns[] = {"Id", "Réf.", "Libellé", "Qté", "PU", "Description", "Catégorie", "Fournisseur", "Editer", "Supprimer"};
+	private	final String columnsMin[] = {"Id", "Réf.", "Libellé", "Qté", "PU", "Description", "Catégorie", "Fournisseur"};
 	private ArrayList<ProductModel> allProducts;
 	private String userRole;
 
