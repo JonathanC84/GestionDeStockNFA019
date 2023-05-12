@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -65,12 +66,17 @@ public class MainController {
 
 		String userName = userDetails.get("prenom");
 		String userRole = userDetails.get("role");
+		ArrayList<UserModel> users = new ArrayList<UserModel>();
+		users = userDAO.getAllUsers();
 
 		view.frame.setVisible(true);
 		view.getMainTabs().setSelectedComponent(view.getProductPanel());
 		view.getWelcomeLabel().setText("Bienvenue "+userName+" ("+userRole+")");
 		view.getLogoutBtn().addActionListener(e -> disconnection());
 		view.getAddProductBtn().addActionListener(e -> productController.addProduct(view, userRole));
+		view.getUserList().setListData(users);
+		
+		
 
 		if(userDetails.get("role").equals("gestionnaire")) {
 			view.getUsersPanel().setVisible(false);

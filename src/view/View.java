@@ -6,6 +6,8 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.*;
 
+import model.UserModel;
+
 public class View {
 
 	public JFrame frame;
@@ -17,6 +19,7 @@ public class View {
 	private JScrollPane productScroll, entrieScroll, removalScroll;
 	private JTable productTable, entrieTable, removalTable;
 	private ImageIcon icon, logout;
+	private JList<UserModel> userList;
 		
 	public View() {
 		initialize();
@@ -44,7 +47,7 @@ public class View {
 		header.setLocation((frame.getWidth() - header.getWidth())/2 , 10);
 		header.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		header.setOpaque(false);
-		frame.add(header);
+		frame.getContentPane().add(header);
 		
 		welcomeLabel = new JLabel();
 		welcomeLabel.setText("Bienvenue sur GeStock !");
@@ -121,7 +124,35 @@ public class View {
 		//onglets utilisateurs
 		usersPanel = new JPanel();
 		mainTabs.addTab("Utilisateurs", null, usersPanel, null);
+		usersPanel.setLayout(null);
+		JScrollPane userScroll = new JScrollPane();
+		userScroll.setBounds(0, 308, 627, -308);
+		usersPanel.add(userScroll);
+		
+		userList = new JList<UserModel>();
+		usersPanel.add(userList);
+		userList.setBounds(131, 64, 600, 215);
+		
+		JButton btnAjouterUser = new JButton("Ajouter");
+		btnAjouterUser.setBounds(228, 336, 85, 21);
+		usersPanel.add(btnAjouterUser);
+		
+		JButton btnModifierUser = new JButton("Modifier");
+		btnModifierUser.setBounds(383, 336, 85, 21);
+		usersPanel.add(btnModifierUser);
+		
+		JButton btnSupprimerUser = new JButton("Supprimer");
+		btnSupprimerUser.setBounds(553, 336, 85, 21);
+		usersPanel.add(btnSupprimerUser);
+		
+	}
 
+	public JList<UserModel> getUserList() {
+		return userList;
+	}
+
+	public void setUserList(JList<UserModel> userList) {
+		this.userList = userList;
 	}
 
 	public JLabel getWelcomeLabel() {
@@ -163,5 +194,4 @@ public class View {
 	public JButton getAddProductBtn() {
 		return addProductBtn;
 	}
-	
 }

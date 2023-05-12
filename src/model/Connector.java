@@ -6,7 +6,7 @@ public class Connector {
 
 	private static String url = "jdbc:mysql://localhost:3306/bdStock?useSSL=false&serverTimezone=UTC";
 	private static String user = "root";
-	private static String password = "";
+	private static String password = "1234";
 	private static Connection connection = null;
 	
 	public Connector() {

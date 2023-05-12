@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UserDAO {
@@ -44,6 +45,29 @@ public class UserDAO {
 		return userDetails;
 	}
 	
+	public ArrayList<UserModel> getAllUsers(){
+		ArrayList<UserModel> users = new ArrayList<UserModel>();
+		String query = "select * from Utilisateur;";
+		try {
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			while(resultSet.next()) {
+				UserModel userModel = new UserModel();
+				userModel.setPrenom(resultSet.getString("prenom_user"));
+				userModel.setNom(resultSet.getString("nom_user"));
+				userModel.setRole(resultSet.getString("role_user"));
+				userModel.setPassword(resultSet.getString("mdp_user"));
+				userModel.setLogin(resultSet.getString("login_user"));
+				users.add(userModel);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		
+		return users;
+	}
+	
 	public void addUser() {
 		
 	}
@@ -62,6 +86,11 @@ public class UserDAO {
 	
 	public HashMap<String, String> getUserDetails(String login) {
 		return userDetails(login);
+	}
+
+	public static void addUser(UserModel newUser) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
