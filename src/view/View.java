@@ -6,20 +6,26 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.Component;
 
 public class View {
 
 	public JFrame frame;
-	private JPanel header;
 	private JLabel welcomeLabel;
-	private JButton logoutBtn, addProductBtn, searchBtn;
+	private JButton logoutBtn, addProductBtn, searchBtn,
+	addOrderBtn, editOrderBtn, deleteOrderBtn,
+	addSupplierBtn, editSupplierBtn, deleteSupplierBtn;
 	private JTextField searchField;
 	private ArrayList<String> searchTypes;
 	private JComboBox<String> searchTypeSelection;
 	private JTabbedPane mainTabs;
-	private JPanel productPanel, usersPanel, supplyPanel, movementPanel, entriePanel, removalPanel, searchPanel;
-	private JScrollPane productScroll, entrieScroll, removalScroll;
+	private JPanel header, productPanel, usersPanel, supplyPanel, movementPanel,
+	entriePanel, removalPanel, searchPanel, orderPanel, supplierPanel,
+	orderButtonsPanel, supplierButtonPanel;
+	private JScrollPane productScroll, entrieScroll, removalScroll, orderScroll, orderDetailScroll, supplierScroll;
 	private JTable productTable, entrieTable, removalTable;
+	private JList<String> orderList, orderDetailList, supplierList;
 	private ImageIcon icon, logout;
 		
 	public View() {
@@ -50,7 +56,7 @@ public class View {
 		header.setLocation((frame.getWidth() - header.getWidth())/2 , 10);
 		header.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		header.setOpaque(false);
-		frame.add(header);
+		frame.getContentPane().add(header);
 		
 		welcomeLabel = new JLabel();
 		welcomeLabel.setText("Bienvenue sur GeStock !");
@@ -59,12 +65,14 @@ public class View {
 		header.add(welcomeLabel);
 		
 		logoutBtn = new JButton();
-		logoutBtn.setPreferredSize(new Dimension(24, 24));
+		logoutBtn.setPreferredSize(new Dimension(28, 24));
 		logoutBtn.setIcon(logout);
 		logoutBtn.setToolTipText("Se déconnecter");
 		header.add(logoutBtn);
 		
-		//creation des onglets
+		/*
+		 * Création des onglets
+		 */
 		mainTabs = new JTabbedPane(JTabbedPane.TOP);
 		mainTabs.setForeground(new Color(0, 0, 0));
 		mainTabs.setBackground(new Color(248, 248, 255));
@@ -73,31 +81,25 @@ public class View {
 		mainTabs.setLocation((frame.getWidth() - mainTabs.getWidth())/2 , 20);
 		frame.getContentPane().add(mainTabs);
 				
-		//onglet produits
+		/*
+		 * onglet produits
+		 */
 		productPanel = new JPanel();
 		productPanel.setLayout(new FlowLayout(FlowLayout.RIGHT, 15, 5));
 		mainTabs.addTab("Produits en stock", null, productPanel, null);
-		
-		productTable = new JTable();
-		productTable.setPreferredScrollableViewportSize(new Dimension(1300, 400));
-		productTable.setRowHeight(30);
-		productTable.setFont(font16);
-
-		productScroll = new JScrollPane(productTable);
-		productPanel.add(productScroll);
-
 		searchPanel = new JPanel();
 		productPanel.add(searchPanel);
 		
+		// barre de recherche
 		searchField = new JTextField(25);
 		searchField.setFont(font16);
-
+		
 		searchTypes = new ArrayList<String>();
 		searchTypes.add("par libellé");
 		searchTypes.add("par référence");
 		searchTypes.add("par fournisseur");
 		searchTypes.add("par catégorie");
-		
+
 		searchTypeSelection = new JComboBox<String>();
 		for(String type : searchTypes) {
 			searchTypeSelection.addItem(type);
@@ -105,10 +107,11 @@ public class View {
 		searchTypeSelection.setBackground(Color.white);
 		searchTypeSelection.setFont(font16);
 		
+		// bouton rechercher
 		searchBtn = new JButton("Rechercher produit");
 		searchBtn.setToolTipText("Rechercher un produit");
-		searchBtn.setPreferredSize(new Dimension(200,40));
-		searchBtn.setFont(font18);
+		//searchBtn.setPreferredSize(new Dimension(200,40));
+		searchBtn.setFont(font16);
 		
 		searchPanel.add(searchField);
 		searchPanel.add(searchTypeSelection);
@@ -117,9 +120,17 @@ public class View {
 		// bouton ajouter produit
 		addProductBtn = new JButton("Ajouter produit");
 		addProductBtn.setToolTipText("Créer une ligne produit");
-		addProductBtn.setPreferredSize(new Dimension(200,40));
-		addProductBtn.setFont(font18);
+		//addProductBtn.setPreferredSize(new Dimension(200,40));
+		addProductBtn.setFont(font16);
 		productPanel.add(addProductBtn);
+		
+		productTable = new JTable();
+		productTable.setPreferredScrollableViewportSize(new Dimension(1300, 400));
+		productTable.setRowHeight(30);
+		productTable.setFont(font16);
+		
+		productScroll = new JScrollPane(productTable);
+		productPanel.add(productScroll);
 		
 		// panel mouvements
 		movementPanel = new JPanel();
@@ -148,11 +159,95 @@ public class View {
 		removalPanel.add(removalScroll);
 		movementPanel.add(removalPanel);
 		
-		//onglet commandes
+		/*
+		 * onglet commandes
+		 */
 		supplyPanel = new JPanel();
 		mainTabs.addTab("Commandes fournisseurs", null, supplyPanel, null);
 		
-		//onglets utilisateurs
+		// Panneau Commandes
+		orderPanel = new JPanel();
+		orderPanel.setBorder(BorderFactory.createTitledBorder(null, "Commandes", 0, 0, font18));
+		orderPanel.setPreferredSize(new Dimension(1300, 400));
+		
+		// Liste commandes
+		orderList = new JList<String>();
+		
+		orderScroll = new JScrollPane(orderList);
+		orderScroll.setPreferredSize(new Dimension(830, 320));
+		
+		// Liste des détails commande (lignes produits)
+		orderDetailList = new JList<String>();
+		
+		orderDetailScroll = new JScrollPane(orderDetailList);
+		orderDetailScroll.setPreferredSize(new Dimension(430, 320));
+		
+		orderButtonsPanel = new JPanel();
+		
+		addOrderBtn = new JButton("Créer une commande");
+		addOrderBtn.setFont(font16);
+		editOrderBtn = new JButton("Modifier une commande");
+		editOrderBtn.setFont(font16);
+		deleteOrderBtn = new JButton("Supprimer une commande");
+		deleteOrderBtn.setFont(font16);
+		
+		orderButtonsPanel.add(addOrderBtn);
+		orderButtonsPanel.add(editOrderBtn);
+		orderButtonsPanel.add(deleteOrderBtn);
+		
+		orderPanel.add(orderButtonsPanel);
+		orderPanel.add(orderScroll);
+		orderPanel.add(orderDetailScroll);
+		
+		
+		
+		// Panneau Fournisseurs
+		supplierPanel = new JPanel();
+		supplierPanel.setBorder(BorderFactory.createTitledBorder(null, "Fournisseurs", 0, 0, font18));
+		supplierPanel.setPreferredSize(new Dimension(1300, 340));
+		
+		supplierButtonPanel = new JPanel();
+		supplierButtonPanel.setBounds(900, 30, 250, 300);
+		
+		addSupplierBtn = new JButton("Ajouter un fournisseur");
+		addSupplierBtn.setBounds(0, 100, 225, 28);
+		addSupplierBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		addSupplierBtn.setFont(font16);
+		editSupplierBtn = new JButton("Modifier un fournisseur");
+		editSupplierBtn.setBounds(0, 150, 225, 28);
+		editSupplierBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		editSupplierBtn.setFont(font16);
+		deleteSupplierBtn = new JButton("Supprimer un fournisseur");
+		deleteSupplierBtn.setBounds(0, 200, 225, 28);
+		deleteSupplierBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		deleteSupplierBtn.setFont(font16);
+		supplierPanel.setLayout(null);
+		
+		supplierList = new JList<String>();
+		
+		supplierScroll = new JScrollPane(supplierList);
+		supplierScroll.setBounds(200, 30, 600, 300);
+		supplierScroll.setPreferredSize(new Dimension(700, 300));
+		supplierPanel.add(supplierScroll);
+		supplierButtonPanel.setLayout(null);
+		
+		supplierButtonPanel.add(addSupplierBtn);
+		supplierButtonPanel.add(editSupplierBtn);
+		supplierButtonPanel.add(deleteSupplierBtn);
+		
+		supplierPanel.add(supplierButtonPanel);
+		
+		supplyPanel.add(orderPanel);
+		supplyPanel.add(supplierPanel);
+	
+		
+		
+		
+		
+		
+		/*
+		 * onglets utilisateurs
+		 */
 		usersPanel = new JPanel();
 		mainTabs.addTab("Utilisateurs", null, usersPanel, null);
 
