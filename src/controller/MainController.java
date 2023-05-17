@@ -12,8 +12,11 @@ public class MainController {
 	private LoginView loginView;
 	private View view;
 	private UserDAO userDAO;
+	private SupplierDAO supplierDAO;
 	private ProductController productController;
 	private MovementController movementController;
+	private OrderController orderController;
+	private SupplierController supplierController;
 
 	public MainController() {
 
@@ -23,8 +26,6 @@ public class MainController {
 		this.loginView = loginView;
 		this.view = view;
 		userDAO = new UserDAO();
-		productController = new ProductController();
-		movementController = new MovementController();
 		initController();
 	}
 
@@ -62,6 +63,13 @@ public class MainController {
 
 		loginView.frame.dispose();
 
+		productController = new ProductController();
+		movementController = new MovementController();
+		orderController = new OrderController();
+		supplierController = new SupplierController();
+		new OrderDAO();
+		supplierDAO = new SupplierDAO();
+
 		String userName = userDetails.get("prenom");
 		String userRole = userDetails.get("role");
 
@@ -69,6 +77,7 @@ public class MainController {
 		view.getMainTabs().setSelectedComponent(view.getProductPanel());
 		view.getWelcomeLabel().setText("Bienvenue "+userName+" ("+userRole+")");
 		view.getLogoutBtn().addActionListener(e -> disconnection());
+		// méthodes CRUD pour les produits
 		view.getAddProductBtn().addActionListener(e -> productController.addProduct(view, userRole));
 		view.getSearchField().addActionListener(e -> productController.searchProduct(view, userRole));
 		view.getSearchBtn().addActionListener(e -> productController.searchProduct(view, userRole));
@@ -84,6 +93,23 @@ public class MainController {
 			view.getMainTabs().remove(view.getSupplyPanel());
 			view.getProductPanel().remove(view.getAddProductBtn());
 		}
+		// affichage des commandes
+		view.getOrderList().setListData(orderController.getAllOrders().toArray());
+		view.getOrderList().addListSelectionListener(e -> orderController.selectOrder(view));
+		// affichage des fournisseurs
+		view.getSupplierList().setListData(supplierDAO.getVisibleSuppliers().toArray());
+		// méthodes CRUD pour les commandes
+		view.getAddOrderBtn().addActionListener(e -> orderController.addOrder(view));
+		view.getEditOrderBtn().addActionListener(e -> orderController.editOrder());
+		view.getDeleteOrderBtn().addActionListener(e -> orderController.deleteOrder());
+		// méthodes CRUD pour les fournisseurs
+		view.getAddSupplierBtn().addActionListener(
+				e -> supplierController.addSupplier(view));
+		view.getEditSupplierBtn().addActionListener(
+				e -> supplierController.editSupplier(view.getSupplierList().getSelectedIndex(), view));
+		view.getDeleteSupplierBtn().addActionListener(
+				e -> supplierController.deleteSupplier(view.getSupplierList().getSelectedIndex(), view));
+
 
 		JTable productTable = new JTable();
 		productTable = view.getProductTable();

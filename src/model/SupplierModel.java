@@ -46,6 +46,12 @@ public class SupplierModel {
 		this.supplierPhoneNumber = supplierPhoneNumber;
 	}
 
+	@Override
+	public String toString() {
+		return supplierName + " - " + supplierAddress
+				+ " - " + supplierPhoneNumber;
+	}
+
 
 }
 

@@ -35,7 +35,7 @@ public class ProductOptionView {
     private CategoryDAO categoryDAO = new CategoryDAO();
     private SupplierDAO supplierDAO = new SupplierDAO();
     private ArrayList<CategoryModel> categories = categoryDAO.getCategories();
-    private ArrayList<SupplierModel> suppliers = supplierDAO.getSuppliers();
+    private ArrayList<SupplierModel> suppliers = supplierDAO.getVisibleSuppliers();
 	
 	public JPanel getPanel(ProductModel product) {
 		

@@ -6,7 +6,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.Component;
 
 public class View {
@@ -25,7 +24,7 @@ public class View {
 	orderButtonsPanel, supplierButtonPanel;
 	private JScrollPane productScroll, entrieScroll, removalScroll, orderScroll, orderDetailScroll, supplierScroll;
 	private JTable productTable, entrieTable, removalTable;
-	private JList<String> orderList, orderDetailList, supplierList;
+	private JList orderList, orderDetailList, supplierList;
 	private ImageIcon icon, logout;
 		
 	public View() {
@@ -60,12 +59,12 @@ public class View {
 		
 		welcomeLabel = new JLabel();
 		welcomeLabel.setText("Bienvenue sur GeStock !");
-		welcomeLabel.setFont(font18);
+		welcomeLabel.setFont(font16);
 		welcomeLabel.setLayout(null);
 		header.add(welcomeLabel);
 		
 		logoutBtn = new JButton();
-		logoutBtn.setPreferredSize(new Dimension(28, 24));
+		logoutBtn.setPreferredSize(new Dimension(24, 24));
 		logoutBtn.setIcon(logout);
 		logoutBtn.setToolTipText("Se déconnecter");
 		header.add(logoutBtn);
@@ -171,14 +170,14 @@ public class View {
 		orderPanel.setPreferredSize(new Dimension(1300, 400));
 		
 		// Liste commandes
-		orderList = new JList<String>();
-		
+		orderList = new JList();
+		orderList.setFont(font14);
 		orderScroll = new JScrollPane(orderList);
 		orderScroll.setPreferredSize(new Dimension(830, 320));
 		
 		// Liste des détails commande (lignes produits)
-		orderDetailList = new JList<String>();
-		
+		orderDetailList = new JList();
+		orderDetailList.setFont(font14);
 		orderDetailScroll = new JScrollPane(orderDetailList);
 		orderDetailScroll.setPreferredSize(new Dimension(430, 320));
 		
@@ -198,8 +197,6 @@ public class View {
 		orderPanel.add(orderButtonsPanel);
 		orderPanel.add(orderScroll);
 		orderPanel.add(orderDetailScroll);
-		
-		
 		
 		// Panneau Fournisseurs
 		supplierPanel = new JPanel();
@@ -223,7 +220,8 @@ public class View {
 		deleteSupplierBtn.setFont(font16);
 		supplierPanel.setLayout(null);
 		
-		supplierList = new JList<String>();
+		supplierList = new JList();
+		supplierList.setFont(font14);
 		
 		supplierScroll = new JScrollPane(supplierList);
 		supplierScroll.setBounds(200, 30, 600, 300);
@@ -240,11 +238,6 @@ public class View {
 		supplyPanel.add(orderPanel);
 		supplyPanel.add(supplierPanel);
 	
-		
-		
-		
-		
-		
 		/*
 		 * onglets utilisateurs
 		 */
@@ -303,6 +296,54 @@ public class View {
 	
 	public JButton getAddProductBtn() {
 		return addProductBtn;
+	}
+
+	public JButton getAddOrderBtn() {
+		return addOrderBtn;
+	}
+
+	public JButton getEditOrderBtn() {
+		return editOrderBtn;
+	}
+
+	public JButton getDeleteOrderBtn() {
+		return deleteOrderBtn;
+	}
+
+	public JButton getAddSupplierBtn() {
+		return addSupplierBtn;
+	}
+
+	public JButton getEditSupplierBtn() {
+		return editSupplierBtn;
+	}
+
+	public JButton getDeleteSupplierBtn() {
+		return deleteSupplierBtn;
+	}
+
+	public JList getOrderList() {
+		return orderList;
+	}
+
+	public JList getOrderDetailList() {
+		return orderDetailList;
+	}
+	
+	public JList getSupplierList() {
+		return supplierList;
+	}
+	
+	public void setOrderList(JList orderList) {
+		this.orderList = orderList;
+	}
+
+	public void setOrderDetailList(JList orderDetailList) {
+		this.orderDetailList = orderDetailList;
+	}
+	
+	public void setSupplierList(JList supplierList) {
+		this.supplierList = supplierList;
 	}
 	
 }

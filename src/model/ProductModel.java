@@ -108,9 +108,7 @@ public class ProductModel {
 
 	@Override
 	public String toString() {
-		return "ProductModel [id=" + id + ", prodRef=" + prodRef + ", prodName=" + prodName + ", prodDesc=" + prodDesc
-				+ ", prodQuantity=" + prodQuantity + ", prodExpTime=" + prodExpTime + ", prodUnitPrice=" + prodUnitPrice
-				+ ", prodCategory=" + prodCategory + ", prodSupplier=" + prodSupplier + "]";
+		return prodRef + " - " + prodName + " - Qte commandée : " + prodQuantity + " - PU : " + prodUnitPrice;
 	}
 	
 	

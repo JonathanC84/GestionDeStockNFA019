@@ -14,6 +14,8 @@ public class ProductController {
 
 	private ProductDAO productDAO = new ProductDAO();
 	private MovementController movementController = new MovementController();
+	private ImageIcon editIcon = new ImageIcon(getClass().getClassLoader().getResource("modify32.png"));
+	private ImageIcon deleteIcon = new ImageIcon(getClass().getClassLoader().getResource("delete32.png"));
 	//private ArrayList<ProductModel> allProducts = productDAO.getAllProducts();
 	// taille des colonnes de la table Produits
 	static int COLUMN_SIZES[] = {50, 150, 200, 50, 75, 200, 150, 150, 75, 75};
@@ -85,7 +87,6 @@ public class ProductController {
 	public void addProduct(View view, String userRole) {
 		JTable tableProduct = view.getProductTable();
 		ProductModel newProduct = new ProductModel();
-		ImageIcon editIcon = new ImageIcon(getClass().getClassLoader().getResource("modify32.png"));
 		ProductOptionView pov = new ProductOptionView();
 
 		int option = JOptionPane.showConfirmDialog(null, pov.getPanel(newProduct) , "Ajout d'une ligne "
@@ -106,7 +107,7 @@ public class ProductController {
 					movementController.entryMovement(newProduct, view, newProduct.getProdQuantity());
 				}
 				initializeProductTable(view, tableProduct, userRole);
-			} catch (Exception exception) {
+			} catch (Exception e) {
 				return;
 			}
 		}
@@ -128,7 +129,6 @@ public class ProductController {
 				int productInitialQuantity = product.getProdQuantity();
 				int movementQuantity = 0;
 
-				ImageIcon editIcon = new ImageIcon(getClass().getClassLoader().getResource("modify32.png"));
 				ProductOptionView pov = new ProductOptionView();
 
 				int option = JOptionPane.showConfirmDialog(null, pov.getPanel(product) , "Edition du produit \""
@@ -179,8 +179,6 @@ public class ProductController {
 				int productId = (int) table.getModel().getValueAt(modelRow, 0);
 
 				ProductModel productToDelete = productDAO.getProduct(productId);
-
-				ImageIcon deleteIcon = new ImageIcon(getClass().getClassLoader().getResource("delete32.png"));
 
 				int option = JOptionPane.showConfirmDialog(null, "Êtes-vous sûr de vouloir supprimer "
 						+ "cette ligne produit ?", "Suppression "
