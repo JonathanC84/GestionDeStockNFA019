@@ -25,11 +25,16 @@ public class SupplierController {
 
 		if(option == JOptionPane.OK_OPTION) {
 			try {
-				newSupplier.setSupplierName(sov.getNameField());
-				newSupplier.setSupplierAddress(sov.getAddressField());
-				newSupplier.setSupplierPhoneNumber(sov.getPhoneField());
-				supplierDAO.addSupplier(newSupplier);
-				view.getSupplierList().setListData(supplierDAO.getVisibleSuppliers().toArray());
+				if(sov.getNameField().isEmpty() || sov.getAddressField().isEmpty() || sov.getPhoneField().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "Veuillez renseigner tous les champs");
+					return;
+				} else {
+					newSupplier.setSupplierName(sov.getNameField());
+					newSupplier.setSupplierAddress(sov.getAddressField());
+					newSupplier.setSupplierPhoneNumber(sov.getPhoneField());
+					supplierDAO.addSupplier(newSupplier);
+					view.getSupplierList().setListData(supplierDAO.getVisibleSuppliers().toArray());
+				}
 			} catch (Exception e) {
 				return;
 			}

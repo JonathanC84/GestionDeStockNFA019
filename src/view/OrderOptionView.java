@@ -75,8 +75,21 @@ public class OrderOptionView {
 		//panel.add(datePanel);
 		panel.add(supplierLabel);
 		panel.add(supplierField);
-		
-		
+				
 		return panel;
 	}
+
+	public JTextField getRefField() {
+		return refField;
+	}
+
+	public JComboBox<String> getSupplierField() {
+		return supplierField;
+	}
+
+	public void setRefField(JTextField refField) {
+		this.refField = refField;
+	}
+	
+	
 }

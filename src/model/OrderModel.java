@@ -21,7 +21,7 @@ public class OrderModel {
 		this.orderDate = null;
 		this.orderTotalPrice = 0;
 		this.orderSupplierId = 0;
-		this.orderedProducts = null;
+		this.orderedProducts = new ArrayList<ProductModel>();
 	}
 
 	public int getId() {

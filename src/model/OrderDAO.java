@@ -20,7 +20,7 @@ public class OrderDAO {
 
 		try {
 			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("select * from Commande order by id_fourn");
+			ResultSet resultSet = statement.executeQuery("select * from Commande where est_visible > 0 order by id_fourn");
 
 			while(resultSet.next()) {
 				OrderModel order = new OrderModel();
@@ -65,6 +65,20 @@ public class OrderDAO {
 	}
 	
 	public void addOrder(OrderModel newOrder) {
-		System.out.println("Ajout de "+newOrder.getOrderRef()+" dans la base");
+		System.out.println(newOrder.getOrderRef());
+		System.out.println(newOrder.getOrderSupplierId());
+		System.out.println(newOrder.getOrderDate());
+	}
+	
+	public void deleteOrder(int id) {
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement("update commande set est_visible = 0 where id_commande="+id);
+			
+			preparedStatement.executeUpdate();
+			preparedStatement.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }

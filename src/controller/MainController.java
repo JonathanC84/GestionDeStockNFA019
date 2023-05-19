@@ -101,7 +101,7 @@ public class MainController {
 		// méthodes CRUD pour les commandes
 		view.getAddOrderBtn().addActionListener(e -> orderController.addOrder(view));
 		view.getEditOrderBtn().addActionListener(e -> orderController.editOrder());
-		view.getDeleteOrderBtn().addActionListener(e -> orderController.deleteOrder());
+		view.getDeleteOrderBtn().addActionListener(e -> orderController.deleteOrder(view));
 		// méthodes CRUD pour les fournisseurs
 		view.getAddSupplierBtn().addActionListener(
 				e -> supplierController.addSupplier(view));

@@ -9,7 +9,7 @@ public class UserModel {
 	private String password;
 	private String role;
 	private String ddc;
-	
+
 	public UserModel() {
 		this.id = 0;
 		this.prenom = "";
@@ -80,6 +80,6 @@ public class UserModel {
 	public String toString() {
 		return "UserModel [id=" + id + ", prenom=" + prenom + ", nom=" + nom + ", login=" + login + ", password="
 				+ password + ", role=" + role + ", ddc=" + ddc + "]";
-	}	
+	}
 }
 

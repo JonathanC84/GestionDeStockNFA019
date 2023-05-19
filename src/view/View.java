@@ -36,6 +36,7 @@ public class View {
 		icon = new ImageIcon(getClass().getClassLoader().getResource("logo32.png"));
 		logout = new ImageIcon(getClass().getClassLoader().getResource("logout.png"));
 		
+		Font font12 = new Font("Arial", Font.PLAIN, 12);
 		Font font14 = new Font("Arial", Font.PLAIN, 14);
 		Font font16 = new Font("Arial", Font.PLAIN, 16);
 		Font font18 = new Font("Arial", Font.PLAIN, 18);
@@ -127,6 +128,8 @@ public class View {
 		productTable.setPreferredScrollableViewportSize(new Dimension(1300, 400));
 		productTable.setRowHeight(30);
 		productTable.setFont(font16);
+		productTable.getTableHeader().setFont(font16);
+		productTable.getTableHeader().setBackground(Color.BLACK);
 		
 		productScroll = new JScrollPane(productTable);
 		productPanel.add(productScroll);
@@ -138,22 +141,26 @@ public class View {
 		
 		// panel entrees
 		entriePanel = new JPanel();
-		entriePanel.setBorder(BorderFactory.createTitledBorder("Entrées"));
+		entriePanel.setBorder(BorderFactory.createTitledBorder(null, "Entrées", 0, 0, font14));
 		entrieTable = new JTable(); 
 		entrieTable.setPreferredScrollableViewportSize(new Dimension(632,210));
 		entrieTable.setRowHeight(20);
 		entrieTable.setFont(font14);
+		entrieTable.getTableHeader().setFont(font12);
+		entrieTable.getTableHeader().setBackground(Color.BLACK);
 		entrieScroll = new JScrollPane(entrieTable);
 		entriePanel.add(entrieScroll);
 		movementPanel.add(entriePanel);
 		
 		// panel sorties
 		removalPanel = new JPanel();
-		removalPanel.setBorder(BorderFactory.createTitledBorder("Sorties"));
+		removalPanel.setBorder(BorderFactory.createTitledBorder(null, "Sorties", 0, 0, font14));
 		removalTable = new JTable();
 		removalTable.setPreferredScrollableViewportSize(new Dimension(632,210));
 		removalTable.setRowHeight(20);
 		removalTable.setFont(font14);
+		removalTable.getTableHeader().setFont(font12);
+		removalTable.getTableHeader().setBackground(Color.BLACK);
 		removalScroll = new JScrollPane(removalTable);
 		removalPanel.add(removalScroll);
 		movementPanel.add(removalPanel);
@@ -172,12 +179,14 @@ public class View {
 		// Liste commandes
 		orderList = new JList();
 		orderList.setFont(font14);
+		orderList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		orderScroll = new JScrollPane(orderList);
 		orderScroll.setPreferredSize(new Dimension(830, 320));
 		
 		// Liste des détails commande (lignes produits)
 		orderDetailList = new JList();
 		orderDetailList.setFont(font14);
+		orderDetailList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		orderDetailScroll = new JScrollPane(orderDetailList);
 		orderDetailScroll.setPreferredSize(new Dimension(430, 320));
 		

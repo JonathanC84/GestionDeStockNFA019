@@ -27,8 +27,8 @@ import model.*;
 public class ProductOptionView {
 
 	private JPanel panel;
-	private JTextField refField, nameField, quantityField, expTimeField;
-	private JSpinner unitPriceField;
+	private JTextField refField, nameField, expTimeField;
+	private JSpinner unitPriceField, quantityField;
 	private JTextArea descField;
 	private JComboBox<String> categoryField, supplierField;
     private JLabel refLabel, nameLabel, descLabel, quantityLabel, unitPriceLabel, expTimeLabel, categoryLabel, supplierLabel;
@@ -92,9 +92,11 @@ public class ProductOptionView {
 		descLabel.setLabelFor(descField);
 		descLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		quantityField = new JTextField(20);
+		SpinnerModel quantityModel = new SpinnerNumberModel(0, 0, 9999, 1);				
+		
+		quantityField = new JSpinner(quantityModel);
 		quantityField.setFont(font);
-		quantityField.setText(String.valueOf(product.getProdQuantity()));
+		quantityField.setValue(product.getProdQuantity());
 		quantityField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		quantityLabel = new JLabel("Quantité");
@@ -102,12 +104,7 @@ public class ProductOptionView {
 		quantityLabel.setLabelFor(descField);
 		quantityLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 		
-		SpinnerModel priceModel = new SpinnerNumberModel(
-			0.0,
-			0.0,
-			9999.99,
-			0.01
-		);
+		SpinnerModel priceModel = new SpinnerNumberModel(0.0, 0.0, 9999.99,	0.01);
 		
 		unitPriceField = new JSpinner(priceModel);
 		unitPriceField.setFont(font);
@@ -178,7 +175,7 @@ public class ProductOptionView {
 	}
 
 	public int getQuantityField() {
-		return Integer.parseInt(quantityField.getText());
+		return Integer.parseInt(quantityField.getValue().toString());
 	}
 
 	public double getUnitPriceField() {
