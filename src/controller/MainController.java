@@ -17,6 +17,7 @@ public class MainController {
 	private MovementController movementController;
 	private OrderController orderController;
 	private SupplierController supplierController;
+	private UserController userController;
 
 	public MainController() {
 
@@ -53,6 +54,7 @@ public class MainController {
 					pass[i] = 0;
 				}
 				initView(userDAO.getUserDetails(user));
+				userDAO.setLastConnectionDate(user);
 			} else {
 				JOptionPane.showMessageDialog(loginView.frame, "Nom d'utilisateur ou mot de passe incorrect");
 			}
@@ -67,15 +69,16 @@ public class MainController {
 		movementController = new MovementController();
 		orderController = new OrderController();
 		supplierController = new SupplierController();
-		new OrderDAO();
+		userController = new UserController();
 		supplierDAO = new SupplierDAO();
 
 		String userName = userDetails.get("prenom");
 		String userRole = userDetails.get("role");
+		String ddn = userDetails.get("ddn");
 
 		view.frame.setVisible(true);
 		view.getMainTabs().setSelectedComponent(view.getProductPanel());
-		view.getWelcomeLabel().setText("Bienvenue "+userName+" ("+userRole+")");
+		view.getWelcomeLabel().setText("Bienvenue "+userName+" ("+userRole+"), dernière connexion : "+ddn);
 		view.getLogoutBtn().addActionListener(e -> disconnection());
 		// méthodes CRUD pour les produits
 		view.getAddProductBtn().addActionListener(e -> productController.addProduct(view, userRole));
@@ -93,22 +96,33 @@ public class MainController {
 			view.getMainTabs().remove(view.getSupplyPanel());
 			view.getProductPanel().remove(view.getAddProductBtn());
 		}
+		
 		// affichage des commandes
 		view.getOrderList().setListData(orderController.getAllOrders().toArray());
 		view.getOrderList().addListSelectionListener(e -> orderController.selectOrder(view));
+		
 		// affichage des fournisseurs
 		view.getSupplierList().setListData(supplierDAO.getVisibleSuppliers().toArray());
+		
+		// affichage des utilisateurs
+		view.getUserList().setListData(userDAO.getUsers().toArray());
+		
 		// méthodes CRUD pour les commandes
 		view.getAddOrderBtn().addActionListener(e -> orderController.addOrder(view));
 		view.getEditOrderBtn().addActionListener(e -> orderController.editOrder());
 		view.getDeleteOrderBtn().addActionListener(e -> orderController.deleteOrder(view));
+		
 		// méthodes CRUD pour les fournisseurs
-		view.getAddSupplierBtn().addActionListener(
-				e -> supplierController.addSupplier(view));
+		view.getAddSupplierBtn().addActionListener(e -> supplierController.addSupplier(view));
 		view.getEditSupplierBtn().addActionListener(
 				e -> supplierController.editSupplier(view.getSupplierList().getSelectedIndex(), view));
 		view.getDeleteSupplierBtn().addActionListener(
 				e -> supplierController.deleteSupplier(view.getSupplierList().getSelectedIndex(), view));
+		
+		// méthodes CRUD pour les utilisateurs
+		view.getAddUserBtn().addActionListener(e -> userController.addUser(view));
+		view.getDeleteUserBtn().addActionListener(e -> userController.deleteUser(view));
+		view.getEditUserBtn().addActionListener(e -> userController.editUser(view));
 
 
 		JTable productTable = new JTable();
@@ -131,5 +145,4 @@ public class MainController {
 		loginView.frame.setVisible(true);
 		initController();
 	}
-
 }

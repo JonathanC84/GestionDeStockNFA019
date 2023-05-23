@@ -14,17 +14,18 @@ public class View {
 	private JLabel welcomeLabel;
 	private JButton logoutBtn, addProductBtn, searchBtn,
 	addOrderBtn, editOrderBtn, deleteOrderBtn,
-	addSupplierBtn, editSupplierBtn, deleteSupplierBtn;
+	addSupplierBtn, editSupplierBtn, deleteSupplierBtn,
+	addUserBtn, editUserBtn, deleteUserBtn;
 	private JTextField searchField;
 	private ArrayList<String> searchTypes;
 	private JComboBox<String> searchTypeSelection;
 	private JTabbedPane mainTabs;
 	private JPanel header, productPanel, usersPanel, supplyPanel, movementPanel,
 	entriePanel, removalPanel, searchPanel, orderPanel, supplierPanel,
-	orderButtonsPanel, supplierButtonPanel;
-	private JScrollPane productScroll, entrieScroll, removalScroll, orderScroll, orderDetailScroll, supplierScroll;
+	orderButtonsPanel, supplierButtonPanel, usersButtonPanel;
+	private JScrollPane productScroll, entrieScroll, removalScroll, orderScroll, orderDetailScroll, supplierScroll, userScroll;
 	private JTable productTable, entrieTable, removalTable;
-	private JList orderList, orderDetailList, supplierList;
+	private JList orderList, orderDetailList, supplierList, userList;
 	private ImageIcon icon, logout;
 		
 	public View() {
@@ -236,6 +237,7 @@ public class View {
 		supplierScroll.setBounds(200, 30, 600, 300);
 		supplierScroll.setPreferredSize(new Dimension(700, 300));
 		supplierPanel.add(supplierScroll);
+		
 		supplierButtonPanel.setLayout(null);
 		
 		supplierButtonPanel.add(addSupplierBtn);
@@ -252,7 +254,42 @@ public class View {
 		 */
 		usersPanel = new JPanel();
 		mainTabs.addTab("Utilisateurs", null, usersPanel, null);
-
+		
+		usersPanel.setPreferredSize(new Dimension(1300, 640));
+		
+		usersButtonPanel = new JPanel();
+		usersButtonPanel.setBounds(900, 30, 250, 300);
+		
+		addUserBtn = new JButton("Ajouter un utilisateur");
+		addUserBtn.setBounds(0, 100, 225, 28);
+		addUserBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		addUserBtn.setFont(font16);
+		editUserBtn = new JButton("Modifier un utilisateur");
+		editUserBtn.setBounds(0, 150, 225, 28);
+		editUserBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		editUserBtn.setFont(font16);
+		deleteUserBtn = new JButton("Supprimer un utilisateur");
+		deleteUserBtn.setBounds(0, 200, 225, 28);
+		deleteUserBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
+		deleteUserBtn.setFont(font16);
+		usersPanel.setLayout(null);
+		
+		userList = new JList();
+		userList.setFont(font14);
+		
+		userScroll = new JScrollPane(userList);
+		userScroll.setBounds(200, 30, 600, 300);
+		userScroll.setPreferredSize(new Dimension(700, 300));
+		usersPanel.add(userScroll);
+		
+		usersButtonPanel.setLayout(null);
+		
+		usersButtonPanel.add(addUserBtn);
+		usersButtonPanel.add(editUserBtn);
+		usersButtonPanel.add(deleteUserBtn);
+		
+		usersPanel.add(usersButtonPanel);
+		
 	}
 
 	public JButton getSearchBtn() {
@@ -331,6 +368,18 @@ public class View {
 		return deleteSupplierBtn;
 	}
 
+	public JButton getAddUserBtn() {
+		return addUserBtn;
+	}
+
+	public JButton getEditUserBtn() {
+		return editUserBtn;
+	}
+
+	public JButton getDeleteUserBtn() {
+		return deleteUserBtn;
+	}
+
 	public JList getOrderList() {
 		return orderList;
 	}
@@ -343,6 +392,14 @@ public class View {
 		return supplierList;
 	}
 	
+	public JList getUserList() {
+		return userList;
+	}
+
+	public void setUserList(JList userList) {
+		this.userList = userList;
+	}
+
 	public void setOrderList(JList orderList) {
 		this.orderList = orderList;
 	}

@@ -1,5 +1,7 @@
 package model;
 
+import java.time.ZonedDateTime;
+
 public class UserModel {
 
 	private int id;
@@ -8,7 +10,7 @@ public class UserModel {
 	private String login;
 	private String password;
 	private String role;
-	private String ddc;
+	private ZonedDateTime ddc;
 
 	public UserModel() {
 		this.id = 0;
@@ -17,7 +19,7 @@ public class UserModel {
 		this.login = "";
 		this.password = "";
 		this.role = "";
-		this.ddc = "";
+		this.ddc = null;
 	}
 
 	public int getId() {
@@ -44,7 +46,7 @@ public class UserModel {
 		return role;
 	}
 
-	public String getDdc() {
+	public ZonedDateTime getDdc() {
 		return ddc;
 	}
 
@@ -72,14 +74,14 @@ public class UserModel {
 		this.role = role;
 	}
 
-	public void setDdc(String ddc) {
+	public void setDdc(ZonedDateTime ddc) {
 		this.ddc = ddc;
 	}
 
 	@Override
 	public String toString() {
-		return "UserModel [id=" + id + ", prenom=" + prenom + ", nom=" + nom + ", login=" + login + ", password="
-				+ password + ", role=" + role + ", ddc=" + ddc + "]";
+		return id + " - "+ prenom + " " + nom + " - login : " + login + " / "
+				+ password + " - " + role;
 	}
 }
 
