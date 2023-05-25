@@ -6,8 +6,8 @@ import javax.swing.table.AbstractTableModel;
 
 /**
  * Classe qui permet de transformer en TableModel l'ArrayList contenant les données
- * récupérées dans la base afin d'afficher les données sous forme de JTable
- * @author Jonathan Cayrol *
+ * produits récupérées dans la base afin d'afficher les données sous forme de JTable
+ * Utilisation de la classe ButtonColumn pour affichage
  */
 
 @SuppressWarnings("serial")

@@ -10,6 +10,13 @@ import javax.swing.JTable;
 import view.ProductOptionView;
 import view.View;
 
+/**
+ * 
+ * Contrôleur pour les produits : initialisation et mise à jour des tables après modification,
+ * rechercher, ajouter, modifier, supprimer un produit 
+ *
+ */
+
 public class ProductController {
 
 	private ProductDAO productDAO = new ProductDAO();
@@ -84,6 +91,12 @@ public class ProductController {
 		refreshProductTable(view, tableProduct, products, userRole);
 	}
 
+	// méthode qui retourne un booléen indiquant si le champ de texte est vide
+	// ou contient seulement des espaces
+	public boolean isEmptyField (String fieldText) {
+		return fieldText.isEmpty() || fieldText.isBlank();
+	}
+
 	public void addProduct(View view, String userRole) {
 		JTable tableProduct = view.getProductTable();
 		ProductModel newProduct = new ProductModel();
@@ -93,25 +106,29 @@ public class ProductController {
 				+ "produit", JOptionPane.OK_CANCEL_OPTION, 1, editIcon);
 
 		if(option == JOptionPane.OK_OPTION) {
-			try {
-				newProduct.setProdRef(pov.getRefField());
-				newProduct.setProdName(pov.getNameField());
-				newProduct.setProdQuantity(pov.getQuantityField());
-				newProduct.setProdUnitPrice(pov.getUnitPriceField());
-				newProduct.setProdDesc(pov.getDescField());
-				newProduct.setProdExpTime(pov.getExpTimeField());
-				newProduct.setProdCategory(pov.getCategoryField());
-				newProduct.setProdSupplier(pov.getSupplierField());
-				productDAO.addProduct(newProduct);
-				if(newProduct.getProdQuantity() > 0) {
-					movementController.entryMovement(newProduct, view, newProduct.getProdQuantity());
-				}
-				initializeProductTable(view, tableProduct, userRole);
-			} catch (Exception e) {
+			if(isEmptyField(pov.getRefField()) || isEmptyField(pov.getNameField())) {
+				JOptionPane.showMessageDialog(null, "Champs obligatoires manquants");
 				return;
+			} else {
+				try {
+					newProduct.setProdRef(pov.getRefField());
+					newProduct.setProdName(pov.getNameField());
+					newProduct.setProdQuantity(pov.getQuantityField());
+					newProduct.setProdUnitPrice(pov.getUnitPriceField());
+					newProduct.setProdDesc(pov.getDescField());
+					newProduct.setProdExpTime(pov.getExpTimeField());
+					newProduct.setProdCategory(pov.getCategoryField());
+					newProduct.setProdSupplier(pov.getSupplierField());
+					productDAO.addProduct(newProduct);
+					if(newProduct.getProdQuantity() > 0) {
+						movementController.entryMovement(newProduct, view, newProduct.getProdQuantity());
+					}
+					initializeProductTable(view, tableProduct, userRole);
+				} catch (Exception e) {
+					return;
+				}
 			}
 		}
-
 	}
 
 	@SuppressWarnings("serial")
@@ -135,32 +152,37 @@ public class ProductController {
 						+product.getProdName()+"\"" , JOptionPane.OK_CANCEL_OPTION, 1, editIcon);
 
 				if(option == JOptionPane.OK_OPTION) {
-					try {
-						product.setProdRef(pov.getRefField());
-						product.setProdName(pov.getNameField());
-						product.setProdQuantity(pov.getQuantityField());
-						product.setProdUnitPrice(pov.getUnitPriceField());
-						product.setProdDesc(pov.getDescField());
-						product.setProdExpTime(pov.getExpTimeField());
-						product.setProdCategory(pov.getCategoryField());
-						product.setProdSupplier(pov.getSupplierField());
-						productDAO.editProduct(productId, product);
-
-						if(product.getProdQuantity() != productInitialQuantity) {
-							if(product.getProdQuantity() > productInitialQuantity)
-							{
-								movementQuantity = product.getProdQuantity() - productInitialQuantity;
-								movementController.entryMovement(product, view, movementQuantity);
-							}
-							else if(product.getProdQuantity() < productInitialQuantity)
-							{
-								movementQuantity = productInitialQuantity - product.getProdQuantity();
-								movementController.removalMovement(product, view, movementQuantity);
-							}
-						}
-						initializeProductTable(view, table, userRole);
-					} catch (Exception exception) {
+					if(isEmptyField(pov.getRefField()) || isEmptyField(pov.getNameField())) {
+						JOptionPane.showMessageDialog(null, "Champs obligatoires manquants");
 						return;
+					} else {
+						try {
+							product.setProdRef(pov.getRefField());
+							product.setProdName(pov.getNameField());
+							product.setProdQuantity(pov.getQuantityField());
+							product.setProdUnitPrice(pov.getUnitPriceField());
+							product.setProdDesc(pov.getDescField());
+							product.setProdExpTime(pov.getExpTimeField());
+							product.setProdCategory(pov.getCategoryField());
+							product.setProdSupplier(pov.getSupplierField());
+							productDAO.editProduct(productId, product);
+
+							if(product.getProdQuantity() != productInitialQuantity) {
+								if(product.getProdQuantity() > productInitialQuantity)
+								{
+									movementQuantity = product.getProdQuantity() - productInitialQuantity;
+									movementController.entryMovement(product, view, movementQuantity);
+								}
+								else if(product.getProdQuantity() < productInitialQuantity)
+								{
+									movementQuantity = productInitialQuantity - product.getProdQuantity();
+									movementController.removalMovement(product, view, movementQuantity);
+								}
+							}
+							initializeProductTable(view, table, userRole);
+						} catch (Exception exception) {
+							return;
+						}
 					}
 				}
 			}

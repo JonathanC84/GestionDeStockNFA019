@@ -10,6 +10,12 @@ import model.UserModel;
 import view.UserView;
 import view.View;
 
+/**
+ * Contrôleur pour les utilisateurs
+ * Ajouter, modifier, supprimer
+ * 
+ *
+ */
 public class UserController {
 
 	private UserDAO userDAO = new UserDAO();
@@ -99,21 +105,25 @@ public class UserController {
 					userToDelete = user;
 				}
 			}
+			// suppression d'un administrateur impossible
+			if(userToDelete.getRole().equals("administrateur")) {
+				JOptionPane.showMessageDialog(null, "Impossible de supprimer un administrateur");
+			} else {
 
-			int option = JOptionPane.showConfirmDialog(null, "Êtes-vous sûr de vouloir supprimer "
-					+ "cet utilisateur ?", "Suppression "
-							+userToDelete.getPrenom(), JOptionPane.YES_NO_OPTION, 1, deleteIcon);
+				int option = JOptionPane.showConfirmDialog(null, "Êtes-vous sûr de vouloir supprimer "
+						+ "cet utilisateur ?", "Suppression "
+								+userToDelete.getPrenom(), JOptionPane.YES_NO_OPTION, 1, deleteIcon);
 
-			if(option == JOptionPane.OK_OPTION) {
-				try {
-					userDAO.deleteUser(userToDelete.getId());
-					users = userDAO.getUsers();
-					view.getUserList().setListData(users.toArray());
-				} catch (Exception exception) {
-					return;
+				if(option == JOptionPane.OK_OPTION) {
+					try {
+						userDAO.deleteUser(userToDelete.getId());
+						users = userDAO.getUsers();
+						view.getUserList().setListData(users.toArray());
+					} catch (Exception exception) {
+						return;
+					}
 				}
 			}
-
 			return;
 		}
 	}

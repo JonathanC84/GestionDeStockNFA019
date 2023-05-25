@@ -10,6 +10,13 @@ import model.SupplierModel;
 import view.SupplierOptionView;
 import view.View;
 
+/**
+ * Contrôleur pour les fournisseurs
+ * Ajouter, modifier, supprimer
+ * 
+ *
+ */
+
 public class SupplierController {
 
 	private SupplierDAO supplierDAO = new SupplierDAO();

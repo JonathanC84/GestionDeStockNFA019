@@ -13,8 +13,8 @@ public class OrderModel {
 	private int orderSupplierId;
 	private ArrayList<ProductModel> orderedProducts;
 	private SupplierDAO supplierDAO;
-	private static DateTimeFormatter D_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yy");
-	
+	private static DateTimeFormatter DT_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yy");
+
 	public OrderModel() {
 		this.id = 0;
 		this.orderRef = "";
@@ -96,7 +96,7 @@ public class OrderModel {
 				supplierName = supplier.getSupplierName();
 		}
 		
-		String formattedDate = D_FORMATTER.format(this.orderDate);
+		String formattedDate = DT_FORMATTER.format(this.orderDate);
 		int productsCount = this.getProductsCount();
 		int totalQuantity = this.getTotalQuantity();
 		

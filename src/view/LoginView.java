@@ -6,6 +6,9 @@ import javax.swing.*;
 
 public class LoginView {
 
+	/**
+	 * Fenêtre de connexion s'ouvrant au lancement de l'application
+	 */
 	public JFrame frame;
 	private JLabel welcomeLabel, userNameLabel, passwordLabel;
 	private JTextField userNameField;

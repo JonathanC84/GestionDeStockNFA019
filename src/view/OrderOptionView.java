@@ -19,8 +19,7 @@ import model.SupplierModel;
  * Classe contenant un panel Commande
  * à appeler dans une boîte de dialoque (showConfirmDialog)
  * Utilisé par editOrder et addOrder
- * @author Jonathan Cayrol
- *
+ * 
  */
 
 public class OrderOptionView {
@@ -90,6 +89,4 @@ public class OrderOptionView {
 	public void setRefField(JTextField refField) {
 		this.refField = refField;
 	}
-	
-	
 }

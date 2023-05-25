@@ -15,6 +15,11 @@ import view.OrderOptionView;
 import view.View;
 import model.OrderDAO;
 
+/**
+ * 
+ * Contrôleur pour les commandes : récupérer, ajouter, modifier, supprimer
+ *
+ */
 
 public class OrderController {
 
@@ -34,6 +39,11 @@ public class OrderController {
 		return allOrders;		
 	}
 
+	/**
+	 * Cette méthode permet de récupérer la liste des produits d'une commande
+	 * pour les afficher dans une liste adjacente
+	 * @param view
+	 */
 	public void selectOrder(View view) {
 		ArrayList<OrderModel> orders = getAllOrders();
 		int index = view.getOrderList().getSelectedIndex();

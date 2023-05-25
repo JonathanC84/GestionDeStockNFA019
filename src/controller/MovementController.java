@@ -13,6 +13,12 @@ import model.ProductModel;
 import view.View;
 import model.ProductDAO;
 
+/**
+ * 
+ * Contrôleur pour les mouvements (entrées et sorties de stock)
+ * Affichage dans deux tables séparées
+ *
+ */
 public class MovementController {
 
 	static int COLUMN_SIZES[] = {50, 200, 300, 50};
